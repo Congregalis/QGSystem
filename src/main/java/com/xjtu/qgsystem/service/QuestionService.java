@@ -124,8 +124,10 @@ public class QuestionService {
      */
     public Question getRandomQuestion() {
         long randomId = RandomUtil.getRandomNum(questionRepository.findCountOfUnchecked());
-        Question question = questionRepository.findById(randomId).get();
-        return question;
+        Optional<Question> questionOptional = questionRepository.findQuestionRandomly();
+
+        return questionOptional.orElse(null);
+
     }
 
     public ScoreVO getScorePicData() {

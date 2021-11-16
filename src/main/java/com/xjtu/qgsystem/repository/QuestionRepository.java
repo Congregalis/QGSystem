@@ -52,5 +52,18 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 41 AND 50;", nativeQuery = true)
     int findCountOfRelevanceFifthStar();
 
-
+    @Query(value = "SELECT * \n" +
+            "\n" +
+            "FROM question AS q1 JOIN (SELECT ROUND(RAND() * (\n" +
+            "\n" +
+            "\t\t(SELECT MAX(id) FROM question WHERE checkedTimes = 0) - (SELECT MIN(id) FROM question WHERE checkedTimes = 0)) + (SELECT MIN(id) FROM question WHERE checkedTimes = 0)\n" +
+            "\n" +
+            "\t) as id\n" +
+            "\n" +
+            ") as q2\n" +
+            "\n" +
+            "WHERE q1.checkedTimes = 0 and q1.id >= q2.id\n" +
+            "\n" +
+            "ORDER BY q1.id limit 1;", nativeQuery = true)
+    Optional<Question> findQuestionRandomly();
 }
