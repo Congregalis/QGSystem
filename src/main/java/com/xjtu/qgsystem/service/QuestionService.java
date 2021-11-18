@@ -5,6 +5,7 @@ import com.xjtu.qgsystem.entity.Question;
 import com.xjtu.qgsystem.repository.ContextRepository;
 import com.xjtu.qgsystem.repository.QuestionRepository;
 import com.xjtu.qgsystem.util.RandomUtil;
+import com.xjtu.qgsystem.util.TokenUtil;
 import com.xjtu.qgsystem.vo.QuestionDistributionVO;
 import com.xjtu.qgsystem.vo.ScoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,12 +91,13 @@ public class QuestionService {
      * @param relevance 相关性
      * @return 评分后的问题
      */
-    public Question rateQuestion(Long id, int fluency, int reasonable, int relevance) {
+    public Question rateQuestion(Long id, int fluency, int reasonable, int relevance, String token) {
         Question q = questionRepository.findById(id).get();
         q.setFluency(fluency * 10);
         q.setReasonable(reasonable * 10) ;
         q.setRelevance(relevance * 10);
         q.setCheckedTimes(q.getCheckedTimes() + 1);
+        q.setUserId(TokenUtil.getInstance().getUserIdFromToken(token));
         questionRepository.save(q);
 
         return q;
