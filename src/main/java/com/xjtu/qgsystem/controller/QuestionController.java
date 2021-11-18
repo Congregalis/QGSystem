@@ -57,4 +57,14 @@ public class QuestionController {
     public Result getScorePicData() {
         return ResultUtil.success((questionService.getScorePicData()));
     }
+
+    @RequestMapping("/distribution")
+    public Result getDistribution() {
+        return ResultUtil.success(questionService.getDistributionByTitle());
+    }
+
+    @RequestMapping("/picData")
+    public Result getPicData() {
+        return ResultUtil.success((questionService.getScorePicData()));
+    }
 }

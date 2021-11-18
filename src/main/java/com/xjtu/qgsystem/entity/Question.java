@@ -16,6 +16,7 @@ public class Question {
     private int checkedTimes;
     private int score;
     private int isDeleted;
+    private Long userId;
 
     public void setId(Long id) {
         this.id = id;
@@ -107,5 +108,13 @@ public class Question {
 
     public void setIsDeleted(int isDeleted) {
         this.isDeleted = isDeleted;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

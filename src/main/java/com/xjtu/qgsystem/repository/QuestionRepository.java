@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface QuestionRepository extends JpaRepository<Question, Long> {
@@ -66,4 +67,19 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             "\n" +
             "ORDER BY q1.id limit 1;", nativeQuery = true)
     Optional<Question> findQuestionRandomly();
+
+    /**
+     * 获取根据 title 划分的问题分布
+     * @return Map<title, count>
+     */
+    @Query(value = "SELECT c.title, COUNT(*)\n" +
+            "\n" +
+            "FROM question AS q\n" +
+            "\n" +
+            "LEFT JOIN context AS c\n" +
+            "\n" +
+            "ON q.contextId = c.id\n" +
+            "\n" +
+            "GROUP BY c.title;", nativeQuery = true)
+    List<Map<String, Object>> getDistributionByTitle();
 }

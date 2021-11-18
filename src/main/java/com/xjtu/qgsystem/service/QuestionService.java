@@ -5,6 +5,7 @@ import com.xjtu.qgsystem.entity.Question;
 import com.xjtu.qgsystem.repository.ContextRepository;
 import com.xjtu.qgsystem.repository.QuestionRepository;
 import com.xjtu.qgsystem.util.RandomUtil;
+import com.xjtu.qgsystem.vo.QuestionDistributionVO;
 import com.xjtu.qgsystem.vo.ScoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -128,6 +133,20 @@ public class QuestionService {
 
         return questionOptional.orElse(null);
 
+    }
+
+    /**
+     * 获取根据 title 划分的问题分布
+     * @return 分布 list，分布由 title 和 count 构成
+     */
+    public List<QuestionDistributionVO> getDistributionByTitle() {
+        List<QuestionDistributionVO> res = new ArrayList<>();
+        List<Map<String, Object>> distribution = questionRepository.getDistributionByTitle();
+
+        for (Map<String, Object> objectMap : distribution) {
+            res.add(new QuestionDistributionVO((String) objectMap.get("title"), ((BigInteger) objectMap.get("COUNT(*)")).intValue()));
+        }
+        return res;
     }
 
     public ScoreVO getScorePicData() {
