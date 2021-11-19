@@ -24,18 +24,19 @@ import java.util.Optional;
 public class QuestionService {
 
     @Autowired
-    QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     ContextRepository contextRepository;
+
+    // 定义分页结果一页有多少数据
+    private final int pageSize = 10;
 
     /**
      * 返回所有查询结果的分页
      * @param pageNum 第几页
      */
     public Page<Question> getAllPage(int pageNum) {
-        // 定义一页有多少条数据
-        int pageSize = 10;
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         Page<Question> page = questionRepository.findAll(pageable);
@@ -47,6 +48,19 @@ public class QuestionService {
         System.out.println("数据集合列表:"+page.getContent());
 
         return page;
+    }
+
+    /**
+     * 根据用户 token 获取用户评估过的所有问题
+     * @param pageNum 第几页
+     * @param token 用户的token
+     * @return 分页结果
+     */
+    public Page<Question> getCheckedPageByToken(int pageNum, String token) {
+        long userId = TokenUtil.getInstance().getUserIdFromToken(token);
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+
+        return questionRepository.findAllByCheckedTimesAndUserId(1, userId, pageable);
     }
 
     /**

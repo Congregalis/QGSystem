@@ -1,6 +1,8 @@
 package com.xjtu.qgsystem.repository;
 
 import com.xjtu.qgsystem.entity.Question;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -72,4 +74,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             "ON q.contextId = c.id\n" +
             "GROUP BY c.title;", nativeQuery = true)
     List<Map<String, Object>> getDistributionByTitle();
+
+    Page<Question> findAllByCheckedTimesAndUserId(int checkedTimes, long userId, Pageable pageable);
 }

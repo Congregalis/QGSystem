@@ -12,11 +12,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/question")
 public class QuestionController {
     @Autowired
-    QuestionService questionService;
+    private QuestionService questionService;
 
     @RequestMapping("/all/{pageNum}")
     public Result findAll(@PathVariable("pageNum") Integer pageNum) {
         return ResultUtil.success(questionService.getAllPage(pageNum));
+    }
+
+    @RequestMapping("/all/{token}/{pageNum}")
+    public Result findAll(@PathVariable("token") String token, @PathVariable("pageNum") Integer pageNum) {
+        return ResultUtil.success(questionService.getCheckedPageByToken(pageNum, token));
     }
 
     @RequestMapping("/unchecked")
