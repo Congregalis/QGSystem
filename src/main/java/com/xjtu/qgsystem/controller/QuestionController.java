@@ -73,4 +73,7 @@ public class QuestionController {
     public Result getPicData() {
         return ResultUtil.success((questionService.getScorePicData()));
     }
+
+    @RequestMapping("/type")
+    public Result getTypeDistribution() {return ResultUtil.success(questionService.getTypeDistribution());}
 }

@@ -2,8 +2,10 @@ package com.xjtu.qgsystem.service;
 
 import com.xjtu.qgsystem.entity.Context;
 import com.xjtu.qgsystem.entity.Question;
+import com.xjtu.qgsystem.entity.Type;
 import com.xjtu.qgsystem.repository.ContextRepository;
 import com.xjtu.qgsystem.repository.QuestionRepository;
+import com.xjtu.qgsystem.repository.TypeRepository;
 import com.xjtu.qgsystem.util.RandomUtil;
 import com.xjtu.qgsystem.util.TokenUtil;
 import com.xjtu.qgsystem.vo.QuestionDistributionVO;
@@ -12,19 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class QuestionService {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private TypeRepository typeRepository;
 
     @Autowired
     ContextRepository contextRepository;
@@ -165,6 +168,10 @@ public class QuestionService {
         return res;
     }
 
+    /**
+     * 获取问题的分数分布
+     * @return 分数分布
+     */
     public ScoreVO getScorePicData() {
         int uncheckedNum = questionRepository.findCountOfUnchecked();
         int checkedNum = questionRepository.findCountOfChecked();
@@ -191,5 +198,61 @@ public class QuestionService {
         relevance[4] = questionRepository.findCountOfRelevanceFifthStar();
 
         return new ScoreVO(uncheckedNum, checkedNum, fluency, reasonable, relevance);
+    }
+
+    /**
+     * 定时任务 每天执行一次 缓解压力
+     * 计算问题类型的的分布并存在 type 表中
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void calTypeDistribution() {
+        Map<String, Integer> typeMap = new HashMap<String, Integer>() {
+            {
+                put("what", 0);
+                put("when", 0);
+                put("where", 0);
+                put("which", 0);
+                put("who", 0);
+                put("how", 0);
+                put("why", 0);
+                put("others", 0);
+            }
+        };
+        System.out.println("定时任务开始执行...");
+        List<String> questions = questionRepository.findAllName();
+
+        for (String q : questions) {
+            boolean put = false;
+            for (String s : typeMap.keySet()) {
+                if (q.contains(s)) {
+                    typeMap.put(s, typeMap.get(s) + 1);
+                    put = true;
+                }
+            }
+            if (!put) {
+                typeMap.put("others", typeMap.get("others") + 1);
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : typeMap.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+            Optional<Type> byName = typeRepository.findByName(entry.getKey());
+            Type type = byName.orElseGet(Type::new);
+
+            type.setName(entry.getKey());
+            type.setCount(entry.getValue());
+            typeRepository.save(type);
+        }
+    }
+
+    public List<QuestionDistributionVO> getTypeDistribution() {
+        List<QuestionDistributionVO> res = new ArrayList<>();
+        List<Type> all = typeRepository.findAll();
+
+        for (Type type : all) {
+            res.add(new QuestionDistributionVO(type.getName(), type.getCount()));
+        }
+
+        return res;
     }
 }

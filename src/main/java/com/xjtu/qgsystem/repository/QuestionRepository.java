@@ -76,4 +76,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Map<String, Object>> getDistributionByTitle();
 
     Page<Question> findAllByCheckedTimesAndUserId(int checkedTimes, long userId, Pageable pageable);
+
+    @Query(value = "select text from question;", nativeQuery = true)
+    List<String> findAllName();
 }
