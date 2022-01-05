@@ -108,11 +108,12 @@ public class QuestionService {
      * @param relevance 相关性
      * @return 评分后的问题
      */
-    public Question rateQuestion(Long id, int fluency, int reasonable, int relevance, String token) {
+    public Question rateQuestion(Long id, int fluency, int reasonable, int relevance, int difficulty, String token) {
         Question q = questionRepository.findById(id).get();
         q.setFluency(fluency * 10);
         q.setReasonable(reasonable * 10) ;
         q.setRelevance(relevance * 10);
+        q.setDifficulty(difficulty);
         q.setCheckedTimes(q.getCheckedTimes() + 1);
         q.setUserId(TokenUtil.getInstance().getUserIdFromToken(token));
         questionRepository.save(q);

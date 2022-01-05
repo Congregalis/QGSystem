@@ -43,8 +43,9 @@ public class QuestionController {
                                @RequestParam(value = "fluency", required = true) int fluency,
                                @RequestParam(value = "reasonable", required = true) int reasonable,
                                @RequestParam(value = "relevance", required = true) int relevance,
+                               @RequestParam(value = "difficulty", required = true) int difficulty,
                                @RequestParam(value = "token", required = true) String token) {
-        return ResultUtil.success(questionService.rateQuestion(id, fluency, reasonable, relevance, token));
+        return ResultUtil.success(questionService.rateQuestion(id, fluency, reasonable, relevance, difficulty, token));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

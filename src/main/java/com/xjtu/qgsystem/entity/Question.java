@@ -13,6 +13,7 @@ public class Question {
     private int fluency;
     private int reasonable;
     private int relevance;
+    private int difficulty;
     private int checkedTimes;
     private int score;
     private int isDeleted;
@@ -116,5 +117,13 @@ public class Question {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public int getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = difficulty;
     }
 }
