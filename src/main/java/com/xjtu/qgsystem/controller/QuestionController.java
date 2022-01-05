@@ -1,11 +1,12 @@
 package com.xjtu.qgsystem.controller;
 
-import com.xjtu.qgsystem.entity.Question;
+import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.annotation.SaMode;
 import com.xjtu.qgsystem.service.QuestionService;
 import com.xjtu.qgsystem.util.result.Result;
 import com.xjtu.qgsystem.util.result.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
+    @SaCheckLogin
     @RequestMapping("/all/{pageNum}")
     public Result findAll(@PathVariable("pageNum") Integer pageNum) {
         return ResultUtil.success(questionService.getAllPage(pageNum));
@@ -24,11 +26,13 @@ public class QuestionController {
         return ResultUtil.success(questionService.getCheckedPageByToken(pageNum, token));
     }
 
+    @SaCheckRole("admin")
     @RequestMapping("/unchecked")
     public Result getFirstUnchecked() {
         return ResultUtil.success(questionService.getFirstUnchecked());
     }
 
+    @SaCheckRole(value= {"annotator", "admin"}, mode = SaMode.OR)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateQuestion(@RequestParam(value = "id", required = true) Long id,
                                  @RequestParam(value = "contextId", required = true) Long contextId,
@@ -38,6 +42,7 @@ public class QuestionController {
         return ResultUtil.success(questionService.updateQuestion(id, contextId, context, question, answer));
     }
 
+    @SaCheckRole(value = {"annotator", "admin"}, mode = SaMode.OR)
     @RequestMapping(value = "/rate", method = RequestMethod.POST)
     public Result rateQuestion(@RequestParam(value = "id", required = true) Long id,
                                @RequestParam(value = "fluency", required = true) int fluency,
@@ -48,6 +53,7 @@ public class QuestionController {
         return ResultUtil.success(questionService.rateQuestion(id, fluency, reasonable, relevance, difficulty, token));
     }
 
+    @SaCheckRole(value = {"admin"})
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Result deletedQuestion(@PathVariable("id") Long id) {
         boolean res = questionService.deleteQuestion(id);

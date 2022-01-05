@@ -10,6 +10,10 @@ public enum ResultEnum {
      */
     FAIL(400, "失败"),
     /**
+     * 无权限访问
+     */
+    NoPermission(403, "您无权限访问"),
+    /**
      * 接口不存在
      */
     NOT_FOUND(404, "接口不存在"),

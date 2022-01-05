@@ -24,6 +24,14 @@ public class ResultUtil {
         return result;
     }
 
+    public static <T> Result<T> noPermission(T data) {
+        Result result = new Result();
+        result.setCode(ResultEnum.NoPermission.getCode());
+        result.setMsg(ResultEnum.NoPermission.getMsg());
+        result.setData(data);
+        return result;
+    }
+
     public static <T> Result<T> defineFail(int code, String msg){
         Result result = new Result();
         result.setCode(code);

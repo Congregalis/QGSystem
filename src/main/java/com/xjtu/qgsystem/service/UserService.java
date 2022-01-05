@@ -1,5 +1,6 @@
 package com.xjtu.qgsystem.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTUtil;
 import com.xjtu.qgsystem.entity.User;
@@ -30,10 +31,17 @@ public class UserService {
 
         // todo: 密码暂时先用明文存在数据库中，后续更换更安全待方式
         if (user.getPassword().equals(password)) {
-            return TokenUtil.getInstance().generateToken(user);
+            String token = TokenUtil.getInstance().generateToken(user);
+            StpUtil.login(token);
+            return token;
         } else {
             return "error token";
         }
+    }
+
+    public String isLogin() {
+        System.out.println("tokenInfo:  " + StpUtil.getTokenInfo());
+        return StpUtil.isLogin() ? "已登陆" : "未登陆";
     }
 
     public UserVO getInfo(String token) {
@@ -45,6 +53,7 @@ public class UserService {
     }
 
     public String logout() {
+        StpUtil.logout();
         return "success";
     }
 }

@@ -28,6 +28,11 @@ public class UserController {
         return res.equals("-1") ? null : new LoginVO(200, res);
     }
 
+    @RequestMapping(value = "/isLogin", method = RequestMethod.GET)
+    public Result isLogin() {
+        return ResultUtil.success(userService.isLogin());
+    }
+
     @RequestMapping(value = "/{token}", method = RequestMethod.GET)
     public Result getUserInfo(@PathVariable("token") String token) {
         UserVO userVO = userService.getInfo(token);

@@ -43,12 +43,6 @@ public class QuestionService {
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         Page<Question> page = questionRepository.findAll(pageable);
-        //获得总页数(这些数据需要分几页)
-        System.out.println("查询总页数："+page.getTotalPages());
-        //获得总记录数（数据库的总记录数）
-        System.out.println("查询总记录数："+page.getTotalElements());
-        //得到数据集合列表
-        System.out.println("数据集合列表:"+page.getContent());
 
         return page;
     }
