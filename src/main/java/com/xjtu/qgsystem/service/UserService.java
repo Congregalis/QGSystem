@@ -34,7 +34,8 @@ public class UserService {
             String token = TokenUtil.getInstance().generateToken(user);
 
             // 若该用户已在线上，则踢下线，使新登陆的客户端上线
-            StpUtil.kickout(token);
+            // (访客除外，所以 public 账号不用踢下线）
+            if (!username.equals("public")) StpUtil.kickout(token);
 
             StpUtil.login(token);
             return token;
