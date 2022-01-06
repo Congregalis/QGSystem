@@ -164,6 +164,22 @@ public class QuestionService {
     }
 
     /**
+     * 获取根据 difficulty 划分的问题分布
+     * difficulty 包括 0 - 简单, 1 - 中等, 2 - 困难
+     * @return 分布 list，分布由 difficulty 和 count 构成
+     */
+    public List<QuestionDistributionVO> getDifficultyDistribution() {
+        List<QuestionDistributionVO> res = new ArrayList<>();
+        List<Map<String, Object>> distribution = questionRepository.getDistributionByDifficulty();
+
+        for (Map<String, Object> objectMap : distribution) {
+            res.add(new QuestionDistributionVO(String.valueOf(objectMap.get("difficulty")), ((BigInteger) objectMap.get("COUNT(*)")).intValue()));
+        }
+
+        return res;
+    }
+
+    /**
      * 获取问题的分数分布
      * @return 分数分布
      */

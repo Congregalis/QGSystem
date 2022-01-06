@@ -32,6 +32,10 @@ public class UserService {
         // todo: 密码暂时先用明文存在数据库中，后续更换更安全待方式
         if (user.getPassword().equals(password)) {
             String token = TokenUtil.getInstance().generateToken(user);
+
+            // 若该用户已在线上，则踢下线，使新登陆的客户端上线
+            StpUtil.kickout(token);
+
             StpUtil.login(token);
             return token;
         } else {

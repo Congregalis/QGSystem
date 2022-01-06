@@ -22,37 +22,37 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     List<Question> getAllByCheckedTimes(int checkedTimes);
 
-    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 0 AND 10;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 0 AND 10 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfFluencyOneStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 11 AND 20;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 11 AND 20 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfFluencyTwoStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 21 AND 30;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 21 AND 30 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfFluencyThreeStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 31 AND 40;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 31 AND 40 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfFluencyThirdStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 41 AND 50;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE fluency BETWEEN 41 AND 50 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfFluencyFifthStar();
 
-    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 0 AND 10;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 0 AND 10 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfReasonableOneStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 11 AND 20;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 11 AND 20 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfReasonableTwoStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 21 AND 30;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 21 AND 30 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfReasonableThreeStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 31 AND 40;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 31 AND 40 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfReasonableThirdStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 41 AND 50;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE reasonable BETWEEN 41 AND 50 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfReasonableFifthStar();
 
-    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 0 AND 10;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 0 AND 10 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfRelevanceOneStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 11 AND 20;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 11 AND 20 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfRelevanceTwoStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 21 AND 30;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 21 AND 30 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfRelevanceThreeStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 31 AND 40;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 31 AND 40 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfRelevanceThirdStar();
-    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 41 AND 50;", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM question WHERE relevance BETWEEN 41 AND 50 AND checkedTimes = 1;", nativeQuery = true)
     int findCountOfRelevanceFifthStar();
 
     @Query(value = "SELECT * \n" +
@@ -74,6 +74,12 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
             "ON q.contextId = c.id\n" +
             "GROUP BY c.title;", nativeQuery = true)
     List<Map<String, Object>> getDistributionByTitle();
+
+    @Query(value = "SELECT difficulty, COUNT(*)\n" +
+            "FROM question\n" +
+            "WHERE checkedTimes = 1\n" +
+            "GROUP BY difficulty;", nativeQuery = true)
+    List<Map<String, Object>> getDistributionByDifficulty();
 
     Page<Question> findAllByCheckedTimesAndUserId(int checkedTimes, long userId, Pageable pageable);
 

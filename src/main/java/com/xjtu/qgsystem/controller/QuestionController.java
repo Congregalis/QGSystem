@@ -61,6 +61,7 @@ public class QuestionController {
         return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
     }
 
+    @SaCheckRole(value = {"annotator", "admin"}, mode = SaMode.OR)
     @RequestMapping("/random")
     public Result getRandomQuestion() {
         return ResultUtil.success(questionService.getRandomQuestion());
@@ -83,4 +84,7 @@ public class QuestionController {
 
     @RequestMapping("/type")
     public Result getTypeDistribution() {return ResultUtil.success(questionService.getTypeDistribution());}
+
+    @RequestMapping("/difficulty")
+    public Result getDifficultyDistribution() {return ResultUtil.success(questionService.getDifficultyDistribution());}
 }
