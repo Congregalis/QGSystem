@@ -20,6 +20,22 @@
     - json文件导入（SQuAD 格式）
 ```
 
+## 目录介绍
+```
+.
+├── component // 自定义的 component
+├── config // 配置类
+├── controller 
+├── entity // 实体类
+├── exception // 处理异常
+├── repository // data 层
+│   └── redis // 缓存层
+├── service
+├── util // 工具类
+│   └── result
+└── vo // 返回前端的响应类
+```
+
 ## Demo
 [在线Demo](http://zscl.xjtudlc.com:8089)
 
