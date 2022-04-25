@@ -6,6 +6,7 @@ import com.xjtu.qgsystem.entity.Type;
 import com.xjtu.qgsystem.repository.ContextRepository;
 import com.xjtu.qgsystem.repository.QuestionRepository;
 import com.xjtu.qgsystem.repository.TypeRepository;
+import com.xjtu.qgsystem.repository.redis.RedisStatisticRepository;
 import com.xjtu.qgsystem.util.RandomUtil;
 import com.xjtu.qgsystem.util.TokenUtil;
 import com.xjtu.qgsystem.vo.QuestionDistributionVO;
@@ -31,6 +32,9 @@ public class QuestionService {
 
     @Autowired
     ContextRepository contextRepository;
+
+    @Autowired
+    RedisStatisticRepository redisStatisticRepository;
 
     // 定义分页结果一页有多少数据
     private final int pageSize = 10;
@@ -155,7 +159,12 @@ public class QuestionService {
      */
     public List<QuestionDistributionVO> getDistributionByTitle() {
         List<QuestionDistributionVO> res = new ArrayList<>();
-        List<Map<String, Object>> distribution = questionRepository.getDistributionByTitle();
+        List<Map<String, Object>> distribution = redisStatisticRepository.getDistributionByTitle();
+        if (distribution == null) {
+            redisStatisticRepository.saveDistributionByTitle(questionRepository.getDistributionByTitle());
+            distribution = redisStatisticRepository.getDistributionByTitle();
+        }
+
 
         for (Map<String, Object> objectMap : distribution) {
             res.add(new QuestionDistributionVO((String) objectMap.get("title"), ((BigInteger) objectMap.get("COUNT(*)")).intValue()));
@@ -170,7 +179,11 @@ public class QuestionService {
      */
     public List<QuestionDistributionVO> getDifficultyDistribution() {
         List<QuestionDistributionVO> res = new ArrayList<>();
-        List<Map<String, Object>> distribution = questionRepository.getDistributionByDifficulty();
+        List<Map<String, Object>> distribution = redisStatisticRepository.getDistributionByDifficulty();
+        if (distribution == null) {
+            redisStatisticRepository.saveDistributionByDifficulty(questionRepository.getDistributionByDifficulty());
+            distribution = redisStatisticRepository.getDistributionByDifficulty();
+        }
 
         for (Map<String, Object> objectMap : distribution) {
             res.add(new QuestionDistributionVO(String.valueOf(objectMap.get("difficulty")), ((BigInteger) objectMap.get("COUNT(*)")).intValue()));
