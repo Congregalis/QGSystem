@@ -69,8 +69,8 @@ public class NewJdbcUtil {
     // 插入一个问答对
     public static Long insertQuestion(Connection connection, String text,
                                        String answerText, Long contextId,
-                                       String distractor) throws SQLException {
-        String sql = "insert into question(id, text, answerText, contextId,evaluationSpans, distractors) values(?, ?,  ?,  ?, ?)";
+                                       String distractors) throws SQLException {
+        String sql = "insert into question(id, text, answerText, contextId, distractors) values(?, ?,  ?,  ?, ?)";
         Long id = getAutoId("question", connection);
 
         PreparedStatement statement = connection.prepareCall(sql);
@@ -80,7 +80,7 @@ public class NewJdbcUtil {
         statement.setString(3, answerText);
         statement.setLong(4, contextId);
 
-        statement.setString(5, distractor);
+        statement.setString(5, distractors);
 
         statement.executeUpdate();
         statement.close();

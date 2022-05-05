@@ -7,11 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-//        <dependency>
-//            <groupId>com.alibaba</groupId>
-//            <artifactId>fastjson</artifactId>
-//            <version>1.2.76</version>
-//        </dependency>
 
 
 public class JsonAnalysis {
@@ -85,7 +80,7 @@ public class JsonAnalysis {
         //System.out.println("读取文件数据util");
 
         StringBuffer strbuffer = new StringBuffer();
-        File myFile = new File(pactFile);//"D:"+File.separatorChar+"DStores.json"
+        File myFile = new File(pactFile);
         if (!myFile.exists()) {
             System.err.println("Can't Find " + pactFile);
         }
