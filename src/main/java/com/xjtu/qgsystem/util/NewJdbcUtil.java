@@ -82,6 +82,7 @@ public class NewJdbcUtil {
 
         statement.setString(5, distractors);
 
+
         statement.executeUpdate();
         statement.close();
 
