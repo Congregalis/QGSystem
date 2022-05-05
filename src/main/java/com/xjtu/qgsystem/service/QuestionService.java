@@ -80,13 +80,19 @@ public class QuestionService {
      * @param context 修改的上下文文本
      * @param question 修改的问题
      * @param answer 修改的答案
+     * @param type 修改的类型
+     * @param evaluationSpans 修改的评估字段
+     * @param distractors 修改的干扰项
      * @return 修改后的问题
      */
-    public Question updateQuestion(Long id, Long contextId, String context, String question, String answer) {
+    public Question updateQuestion(Long id, Long contextId, String context, String question, String answer, String type, String evaluationSpans, String distractors) {
         Question q = questionRepository.findById(id).get();
         Context c = contextRepository.findById(contextId).get();
         q.setText(question);
         q.setAnswerText(answer);
+        q.setType(type);
+        q.setType(evaluationSpans);
+        q.setDistractors(distractors);
         /**
          * todo: 此外，还要判断 answerStart 是否改变，再去做修改
          */

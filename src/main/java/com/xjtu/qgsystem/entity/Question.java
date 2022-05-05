@@ -13,11 +13,15 @@ public class Question {
     private int fluency;
     private int reasonable;
     private int relevance;
-    private int difficulty;
+    private int difficulty;//难度
     private int checkedTimes;
     private int score;
     private int isDeleted;
     private Long userId;
+
+    private String type;
+    private String evaluationSpans;//评估字段
+    private String distractors;
 
     public void setId(Long id) {
         this.id = id;
@@ -126,4 +130,16 @@ public class Question {
     public void setDifficulty(int difficulty) {
         this.difficulty = difficulty;
     }
+
+    public String getType() { return type; }
+
+    public void setType(String type) { this.type = type; }
+
+    public String getEvaluationSpans() { return evaluationSpans; }
+
+    public void setEvaluationSpans(String evaluationSpans) { this.evaluationSpans = evaluationSpans; }
+
+    public String getDistractors() { return distractors; }
+
+    public void setDistractors(String distractors) { this.distractors = distractors; }
 }

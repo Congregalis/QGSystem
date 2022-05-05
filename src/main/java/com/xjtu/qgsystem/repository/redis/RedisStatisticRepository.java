@@ -1,6 +1,6 @@
 package com.xjtu.qgsystem.repository.redis;
 
-import com.sun.corba.se.spi.ior.ObjectKey;
+//import com.sun.corba.se.spi.ior.ObjectKey;
 import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

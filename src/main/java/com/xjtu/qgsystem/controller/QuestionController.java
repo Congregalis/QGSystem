@@ -38,8 +38,11 @@ public class QuestionController {
                                  @RequestParam(value = "contextId", required = true) Long contextId,
                                  @RequestParam(value = "context", required = true) String context,
                                  @RequestParam(value = "question", required = true) String question,
-                                 @RequestParam(value = "answer", required = true) String answer) {
-        return ResultUtil.success(questionService.updateQuestion(id, contextId, context, question, answer));
+                                 @RequestParam(value = "answer", required = true) String answer,
+                                 @RequestParam(value = "type", required = true) String type,
+                                 @RequestParam(value = "evaluationSpans", required = true) String evaluationSpans,
+                                 @RequestParam(value = "distractors", required = true) String distractors) {
+        return ResultUtil.success(questionService.updateQuestion(id, contextId, context, question, answer, type, evaluationSpans, distractors));
     }
 
     @SaCheckRole(value = {"annotator", "admin"}, mode = SaMode.OR)
