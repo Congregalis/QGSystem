@@ -9,6 +9,7 @@ public class Context {
     private Long id;
 
     @Lob
+    @Column(columnDefinition="text")
     @Basic(fetch=FetchType.LAZY)
     private String text; // 数据库中对应 longtext 类型
 

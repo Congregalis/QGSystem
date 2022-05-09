@@ -7,7 +7,7 @@ public class Question {
 
     private Long id;
     private String text;
-    private int answerStart;
+    private int answerStart = -1;
     private String answerText;
     private Context reference;
     private int fluency;
