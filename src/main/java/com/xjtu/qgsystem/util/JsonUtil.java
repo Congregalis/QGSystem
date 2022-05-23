@@ -70,6 +70,8 @@ public class JsonUtil {
     public static void readAndStoreData(Connection conn, JSONObject data) throws SQLException {
 
         String title = data.getString("title");
+        String language = data.getString("language");
+        String subject = data.getString("subject");
         JSONArray paragraphs = data.getJSONArray("paragraphs");
 //        System.out.println("题目：" + title);
 
@@ -78,7 +80,7 @@ public class JsonUtil {
             String context = paragraph.getString("context");
 //            context = context.replace("\n", "");
             // 存 context，并留下对应id
-            Long contextId = JdbcUtil.insertContext(conn, context, title);
+            Long contextId = JdbcUtil.insertContext(conn, context, title, language, subject);
 
             JSONArray qas = paragraph.getJSONArray("qas");
             for (int k = 0; k < qas.size(); k++) {
@@ -89,7 +91,11 @@ public class JsonUtil {
                         qas.getJSONObject(k).getString("question"),
                         qas.getJSONObject(k).getJSONArray("answers").getJSONObject(0).getInteger("answer_start"),
                         qas.getJSONObject(k).getJSONArray("answers").getJSONObject(0).getString("text"),
-                        contextId);
+                        contextId,
+                        qas.getJSONObject(k).getString("type"),
+                        qas.getJSONObject(k).getString("evaluationSpans"),
+                        qas.getJSONObject(k).getString("distractors")
+                        );
 
                 /**
                  * 注：经测试，答案均只有 1 个，所以单个存入数据库即可

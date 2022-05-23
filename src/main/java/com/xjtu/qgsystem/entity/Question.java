@@ -19,9 +19,18 @@ public class Question {
     private int isDeleted;
     private Long userId;
 
+    private boolean status;
     private String type;
     private String evaluationSpans;//评估字段
     private String distractors;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public void setId(Long id) {
         this.id = id;

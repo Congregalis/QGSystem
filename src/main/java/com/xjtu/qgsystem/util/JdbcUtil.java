@@ -47,14 +47,16 @@ public class JdbcUtil {
     }
 
     // 插入一条 context
-    public static Long insertContext(Connection connection, String text, String title) throws SQLException {
-        String sql = "insert into context(id, text, title) values(?, ?, ?)";
+    public static Long insertContext(Connection connection, String text, String title, String language, String subject) throws SQLException {
+        String sql = "insert into context(id, text, title, language, subject) values(?, ?, ?, ?, ?)";
         Long id = getAutoId("context", connection);
 
         PreparedStatement statement = connection.prepareCall(sql);
         statement.setLong(1, id);
         statement.setString(2, text);
         statement.setString(3, title);
+        statement.setString(4, language);
+        statement.setString(5, subject);
         //执行sql语句（插入了几条记录，就返回几）
         int i = statement.executeUpdate();  //executeUpdate：执行并更新
 //        System.out.println(i);
@@ -67,8 +69,9 @@ public class JdbcUtil {
 
     // 插入一个问答对
     public static Long insertQuestion(Connection connection, String text,
-                                      int answerStart, String answerText, Long contextId) throws SQLException {
-        String sql = "insert into question(id, text, answerStart, answerText, contextId) values(?, ?, ?, ?, ?)";
+                                      int answerStart, String answerText, Long contextId, String type,
+                                      String evaluationSpans, String distractors) throws SQLException {
+        String sql = "insert into question(id, text, answerStart, answerText, contextId, type, evaluationSpans, distractors) values(?, ?, ?, ?, ?, ?, ?, ?)";
         Long id = getAutoId("question", connection);
 
         PreparedStatement statement = connection.prepareCall(sql);
@@ -77,6 +80,9 @@ public class JdbcUtil {
         statement.setInt(3, answerStart);
         statement.setString(4, answerText);
         statement.setLong(5, contextId);
+        statement.setString(6, type);
+        statement.setString(7, evaluationSpans);
+        statement.setString(8, distractors);
 
         statement.executeUpdate();
         statement.close();
