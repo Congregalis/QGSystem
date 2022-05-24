@@ -10,9 +10,11 @@ import com.xjtu.qgsystem.repository.redis.RedisStatisticRepository;
 import com.xjtu.qgsystem.util.RandomUtil;
 import com.xjtu.qgsystem.util.TokenUtil;
 import com.xjtu.qgsystem.vo.QuestionDistributionVO;
+import com.xjtu.qgsystem.vo.QuestionVO;
 import com.xjtu.qgsystem.vo.ScoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -43,12 +45,11 @@ public class QuestionService {
      * 返回所有查询结果的分页
      * @param pageNum 第几页
      */
-    public Page<Question> getAllPage(int pageNum) {
+    public Page<QuestionVO> getAllPage(int pageNum) {
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         Page<Question> page = questionRepository.findAll(pageable);
-
-        return page;
+        return listConvertToPage(page, pageable);
     }
 
     /**
@@ -57,20 +58,33 @@ public class QuestionService {
      * @param token 用户的token
      * @return 分页结果
      */
-    public Page<Question> getCheckedPageByToken(int pageNum, String token) {
+    public Page<QuestionVO> getCheckedPageByToken(int pageNum, String token) {
         long userId = TokenUtil.getInstance().getUserIdFromToken(token);
         Pageable pageable = PageRequest.of(pageNum, pageSize);
-
-        return questionRepository.findAllByCheckedTimesAndUserId(1, userId, pageable);
+        Page<Question> page = questionRepository.findAllByCheckedTimesAndUserId(1, userId, pageable);
+        return listConvertToPage(page, pageable);
     }
+
+//   QuestionVO类型的列表
+//    转换为 Page类型
+    public Page<QuestionVO> listConvertToPage(Page<Question> page, Pageable pageable) {
+        List<QuestionVO> list = new ArrayList<>();
+        for(Question question : page) {
+            list.add(questionToQuestionVo(question));
+        }
+        int start = (int)pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > list.size() ? list.size() : ( start + pageable.getPageSize());
+        return new PageImpl<>(list.subList(start, end), pageable, list.size());
+    }
+
 
     /**
      * 获得首个未被评分的问题
      * @return Question
      */
-    public Question getFirstUnchecked() {
+    public QuestionVO getFirstUnchecked() {
         Question question = questionRepository.findFirstUnchecked();
-        return question;
+        return questionToQuestionVo(question);
     }
 
     /**
@@ -80,19 +94,21 @@ public class QuestionService {
      * @param context 修改的上下文文本
      * @param question 修改的问题
      * @param answer 修改的答案
-     * @param type 修改的类型
-     * @param evaluationSpans 修改的评估字段
-     * @param distractors 修改的干扰项
+     * @param questionType 修改的问题类型
+     * @param cognitiveType 修改的认知类型
+     * @param distractorsArray 修改的干扰项
+     * @param whType 修改的wh类型
      * @return 修改后的问题
      */
-    public Question updateQuestion(Long id, Long contextId, String context, String question, String answer, String type, String evaluationSpans, String distractors) {
+    public QuestionVO updateQuestion(Long id, Long contextId, String context, String question, String answer, String questionType, String cognitiveType, String[] distractorsArray, String whType) {
         Question q = questionRepository.findById(id).get();
         Context c = contextRepository.findById(contextId).get();
         q.setText(question);
         q.setAnswerText(answer);
-        q.setType(type);
-        q.setType(evaluationSpans);
-        q.setDistractors(distractors);
+        q.setQuestionType(questionType);
+        q.setCognitiveType(cognitiveType);
+        q.setDistractors(distractorsArrayToString(distractorsArray));
+        q.setWhType(whType);
         /**
          * todo: 此外，还要判断 answerStart 是否改变，再去做修改
          */
@@ -101,7 +117,7 @@ public class QuestionService {
         q.setReference(c);
         questionRepository.save(q);
 
-        return q;
+        return questionToQuestionVo(q);
     }
 
     /**
@@ -112,7 +128,7 @@ public class QuestionService {
      * @param relevance 相关性
      * @return 评分后的问题
      */
-    public Question rateQuestion(Long id, int fluency, int reasonable, int relevance, int difficulty, String token) {
+    public QuestionVO rateQuestion(Long id, int fluency, int reasonable, int relevance, int difficulty, String token) {
         Question q = questionRepository.findById(id).get();
         q.setFluency(fluency * 10);
         q.setReasonable(reasonable * 10) ;
@@ -122,7 +138,7 @@ public class QuestionService {
         q.setUserId(TokenUtil.getInstance().getUserIdFromToken(token));
         questionRepository.save(q);
 
-        return q;
+        return questionToQuestionVo(q);
     }
 
     /**
@@ -143,19 +159,20 @@ public class QuestionService {
      * @param id 问题id
      * @return 问题
      */
-    public Question getQuestionById(Long id) {
-        return questionRepository.findById(id).get();
+    public QuestionVO getQuestionById(Long id) {
+        Question question = questionRepository.findById(id).get();
+        return questionToQuestionVo(question);
     }
 
     /**
      * 生成随机的未被评分的问题
      * @return 随机的未被评分的问题
      */
-    public Question getRandomQuestion() {
+    public QuestionVO getRandomQuestion() {
         long randomId = RandomUtil.getRandomNum(questionRepository.findCountOfUnchecked());
         Optional<Question> questionOptional = questionRepository.findQuestionRandomly();
 
-        return questionOptional.orElse(null);
+        return questionToQuestionVo(questionOptional.orElse(null));
 
     }
 
@@ -284,5 +301,24 @@ public class QuestionService {
         }
 
         return res;
+    }
+
+    /*
+    * 将Question对象转换为QuestionVO对象返回给前端
+    * */
+    public QuestionVO questionToQuestionVo(Question question) {
+        QuestionVO questionVO = (QuestionVO) question;
+        questionVO.setDistractorsArray(questionVO.getDistractors().split("$"));
+        return questionVO;
+    }
+    /*
+     * array转String
+     * */
+    public String distractorsArrayToString(String[] distractorsArray) {
+        String tempDistractors = "";
+        for(String str : distractorsArray) {
+            tempDistractors += str + "$";
+        }
+        return tempDistractors;
     }
 }

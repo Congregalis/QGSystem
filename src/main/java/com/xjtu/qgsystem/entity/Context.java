@@ -1,7 +1,6 @@
 package com.xjtu.qgsystem.entity;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Context {
@@ -21,6 +20,15 @@ public class Context {
 
     private String language;
     private String subject;
+    public String origin;
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
 
     public Context(String text, String title) {
         this.text = text;

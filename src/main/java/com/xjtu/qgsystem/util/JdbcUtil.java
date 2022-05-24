@@ -47,8 +47,8 @@ public class JdbcUtil {
     }
 
     // 插入一条 context
-    public static Long insertContext(Connection connection, String text, String title, String language, String subject) throws SQLException {
-        String sql = "insert into context(id, text, title, language, subject) values(?, ?, ?, ?, ?)";
+    public static Long insertContext(Connection connection, String text, String title, String language, String subject, String origin) throws SQLException {
+        String sql = "insert into context(id, text, title, language, subject, origin) values(?, ?, ?, ?, ?, ?)";
         Long id = getAutoId("context", connection);
 
         PreparedStatement statement = connection.prepareCall(sql);
@@ -57,6 +57,7 @@ public class JdbcUtil {
         statement.setString(3, title);
         statement.setString(4, language);
         statement.setString(5, subject);
+        statement.setString(6, origin);
         //执行sql语句（插入了几条记录，就返回几）
         int i = statement.executeUpdate();  //executeUpdate：执行并更新
 //        System.out.println(i);
@@ -69,9 +70,9 @@ public class JdbcUtil {
 
     // 插入一个问答对
     public static Long insertQuestion(Connection connection, String text,
-                                      int answerStart, String answerText, Long contextId, String type,
-                                      String evaluationSpans, String distractors) throws SQLException {
-        String sql = "insert into question(id, text, answerStart, answerText, contextId, type, evaluationSpans, distractors) values(?, ?, ?, ?, ?, ?, ?, ?)";
+                                      int answerStart, String answerText, Long contextId, String questionType, String cognitiveType,
+                                      String distractors, String whType) throws SQLException {
+        String sql = "insert into question(id, text, answerStart, answerText, contextId, questionType, cognitiveType, distractors, whType) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Long id = getAutoId("question", connection);
 
         PreparedStatement statement = connection.prepareCall(sql);
@@ -80,9 +81,10 @@ public class JdbcUtil {
         statement.setInt(3, answerStart);
         statement.setString(4, answerText);
         statement.setLong(5, contextId);
-        statement.setString(6, type);
-        statement.setString(7, evaluationSpans);
+        statement.setString(6, questionType);
+        statement.setString(7, cognitiveType);
         statement.setString(8, distractors);
+        statement.setString(9, whType);
 
         statement.executeUpdate();
         statement.close();

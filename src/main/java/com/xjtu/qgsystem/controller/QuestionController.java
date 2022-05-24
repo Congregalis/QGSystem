@@ -39,10 +39,11 @@ public class QuestionController {
                                  @RequestParam(value = "context", required = true) String context,
                                  @RequestParam(value = "question", required = true) String question,
                                  @RequestParam(value = "answer", required = true) String answer,
-                                 @RequestParam(value = "type", required = true) String type,
-                                 @RequestParam(value = "evaluationSpans", required = true) String evaluationSpans,
-                                 @RequestParam(value = "distractors", required = true) String distractors) {
-        return ResultUtil.success(questionService.updateQuestion(id, contextId, context, question, answer, type, evaluationSpans, distractors));
+                                 @RequestParam(value = "questionType", required = true) String questionType,
+                                 @RequestParam(value = "cognitiveType", required = true) String cognitiveType,
+                                 @RequestParam(value = "distractorsArray", required = true) String[] distractorsArray,
+                                 @RequestParam(value = "whType", required = true) String whType) {
+        return ResultUtil.success(questionService.updateQuestion(id, contextId, context, question, answer, questionType, cognitiveType, distractorsArray, whType));
     }
 
     @SaCheckRole(value = {"annotator", "admin"}, mode = SaMode.OR)

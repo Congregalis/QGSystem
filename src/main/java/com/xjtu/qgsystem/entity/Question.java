@@ -6,30 +6,31 @@ import javax.persistence.*;
 public class Question {
 
     private Long id;
-    private String text;
+    private String text;//内容
     private int answerStart = -1;
-    private String answerText;
+    private String answerText;//
     private Context reference;
-    private int fluency;
-    private int reasonable;
-    private int relevance;
+    private int fluency;//
+    private int reasonable;//
+    private int relevance;//
     private int difficulty;//难度
     private int checkedTimes;
     private int score;
     private int isDeleted;
     private Long userId;
 
-    private boolean status;
-    private String type;
-    private String evaluationSpans;//评估字段
-    private String distractors;
+    private int isChecked;
+    private String questionType;//题型
+    private String cognitiveType;//认知类型
+    private String distractors;//干扰项
+    private String whType;
 
-    public boolean isStatus() {
-        return status;
+    public int getIsChecked() {
+        return isChecked;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setIsChecked(int isChecked) {
+        this.isChecked = isChecked;
     }
 
     public void setId(Long id) {
@@ -140,15 +141,31 @@ public class Question {
         this.difficulty = difficulty;
     }
 
-    public String getType() { return type; }
-
-    public void setType(String type) { this.type = type; }
-
-    public String getEvaluationSpans() { return evaluationSpans; }
-
-    public void setEvaluationSpans(String evaluationSpans) { this.evaluationSpans = evaluationSpans; }
-
     public String getDistractors() { return distractors; }
 
     public void setDistractors(String distractors) { this.distractors = distractors; }
+
+    public String getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
+    }
+
+    public String getCognitiveType() {
+        return cognitiveType;
+    }
+
+    public void setCognitiveType(String cognitiveType) {
+        this.cognitiveType = cognitiveType;
+    }
+
+    public String getWhType() {
+        return whType;
+    }
+
+    public void setWhType(String whType) {
+        this.whType = whType;
+    }
 }
