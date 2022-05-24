@@ -12,9 +12,12 @@ import com.xjtu.qgsystem.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.*;
 
 import cn.hutool.*;
+
+import static com.xjtu.qgsystem.util.MD5Util.md5;
 
 @Service
 public class UserService {
@@ -29,18 +32,27 @@ public class UserService {
 
         User user = byUsername.get();
 
-        // todo: 密码暂时先用明文存在数据库中，后续更换更安全待方式
-        if (user.getPassword().equals(password)) {
+        // 密码采用md5的方式存放在数据库,但对于没有md5加密的依然可以登录
+        if (user.getPassword().equals(md5(password))) {
+
             String token = TokenUtil.getInstance().generateToken(user);
 
             // 若该用户已在线上，则踢下线，使新登陆的客户端上线
             // (访客除外，所以 public 账号不用踢下线）
             if (!username.equals("public")) StpUtil.kickout(token);
-
             StpUtil.login(token);
             return token;
-        } else {
-            return "error token";
+        } else if (user.getPassword().equals(password)) {
+            String token = TokenUtil.getInstance().generateToken(user);
+            // 若该用户已在线上，则踢下线，使新登陆的客户端上线
+            // (访客除外，所以 public 账号不用踢下线）
+            if (!username.equals("public")) StpUtil.kickout(token);
+            StpUtil.login(token);
+            return token;
+        }else
+        {
+                return "error token";
+
         }
     }
 
