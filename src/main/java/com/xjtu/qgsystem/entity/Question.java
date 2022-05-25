@@ -29,6 +29,7 @@ public class Question {
         return isChecked;
     }
 
+
     public void setIsChecked(int isChecked) {
         this.isChecked = isChecked;
     }

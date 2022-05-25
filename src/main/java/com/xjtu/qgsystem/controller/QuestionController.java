@@ -92,3 +92,4 @@ public class QuestionController {
     @RequestMapping("/difficulty")
     public Result getDifficultyDistribution() {return ResultUtil.success(questionService.getDifficultyDistribution());}
 }
+

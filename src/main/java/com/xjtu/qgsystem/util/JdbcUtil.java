@@ -109,7 +109,6 @@ public class JdbcUtil {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
         return lastId + 1;
     }
 }
