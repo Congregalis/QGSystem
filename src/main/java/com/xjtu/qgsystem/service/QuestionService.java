@@ -9,6 +9,7 @@ import com.xjtu.qgsystem.repository.TypeRepository;
 import com.xjtu.qgsystem.repository.redis.RedisStatisticRepository;
 import com.xjtu.qgsystem.util.RandomUtil;
 import com.xjtu.qgsystem.util.TokenUtil;
+import com.xjtu.qgsystem.vo.CandQVO;
 import com.xjtu.qgsystem.vo.QuestionDistributionVO;
 import com.xjtu.qgsystem.vo.ScoreVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -285,4 +286,26 @@ public class QuestionService {
 
         return res;
     }
+
+    public List<CandQVO> findbycondition(Integer page,Integer pageSize,String title,String language,String subject,Integer fluency,Integer reasonability,Integer relevance,Integer difficulty,Integer score){
+        List<CandQVO> res = new ArrayList<>();
+        int start=(page-1)*pageSize;
+        List<Context> contexts=questionRepository.findbyCondition(start,pageSize,title,language,subject);
+        for (Context context:contexts
+             ) {
+            CandQVO candQVO=new CandQVO();
+            Long contextid=context.getId();
+            List<Question>questions=questionRepository.findQuestionByContextid(contextid);
+            candQVO.setcId(contextid);
+            candQVO.setcLanguage(context.getLanguage());
+            candQVO.setcSubject(context.getSubject());
+            candQVO.setqList(questions);
+            candQVO.setcText(context.getText());
+            candQVO.setcTitle(context.getTitle());
+            res.add(candQVO);
+        }
+        return res;
+    }
+
+
 }

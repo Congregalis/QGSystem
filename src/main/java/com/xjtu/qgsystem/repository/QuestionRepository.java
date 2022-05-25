@@ -1,5 +1,6 @@
 package com.xjtu.qgsystem.repository;
 
+import com.xjtu.qgsystem.entity.Context;
 import com.xjtu.qgsystem.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,4 +86,10 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(value = "select text from question;", nativeQuery = true)
     List<String> findAllName();
+
+   @Query(value = "SELECT * FROM context WHERE title=?3 and language =?4 and subject=?5 limit ?1 , ?2;", nativeQuery = true)
+    List<Context> findbyCondition(Integer start, Integer pagesize, String title, String language, String subject);
+
+   @Query(value = "SELECT * FROM question WHERE contextid=?1", nativeQuery = true)
+    List<Question>findQuestionByContextid(Long contextid);
 }

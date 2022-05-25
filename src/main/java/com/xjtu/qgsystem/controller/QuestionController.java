@@ -3,11 +3,17 @@ package com.xjtu.qgsystem.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.annotation.SaMode;
+import com.xjtu.qgsystem.entity.Context;
+import com.xjtu.qgsystem.service.ContextService;
 import com.xjtu.qgsystem.service.QuestionService;
 import com.xjtu.qgsystem.util.result.Result;
 import com.xjtu.qgsystem.util.result.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/question")
@@ -60,7 +66,7 @@ public class QuestionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Result deletedQuestion(@PathVariable("id") Long id) {
         boolean res = questionService.deleteQuestion(id);
-        
+
         return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
     }
 
@@ -90,4 +96,21 @@ public class QuestionController {
 
     @RequestMapping("/difficulty")
     public Result getDifficultyDistribution() {return ResultUtil.success(questionService.getDifficultyDistribution());}
+
+    @RequestMapping(value = "/findbycondition",method = RequestMethod.POST)
+    public Result findbyCondition(@RequestBody List<Map<String, String>> mapList) {
+        Integer page = Integer.parseInt(mapList.get(0).get("page"));
+        Integer pageSize = Integer.parseInt(mapList.get(1).get("limit"));
+        //String sort=mapList.get(2).get("sort");
+        String title=mapList.get(2).get("cTitle");
+        String language=mapList.get(3).get("cLanguage");
+        String subject=mapList.get(4).get("cSubject");
+        Integer fluency = Integer.parseInt(mapList.get(5).get("qFluency"));
+        Integer reasonability = Integer.parseInt(mapList.get(6).get("qReasonability"));
+        Integer relevance = Integer.parseInt(mapList.get(7).get("qRelevance"));
+        Integer difficulty= Integer.parseInt(mapList.get(8).get("qDifficulty"));
+        Integer score = Integer.parseInt(mapList.get(9).get("qScore"));
+        return ResultUtil.success(questionService.findbycondition(page,pageSize,title,language,subject,fluency,reasonability,relevance,difficulty,score));
+    }
+
 }
