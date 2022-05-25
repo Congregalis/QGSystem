@@ -23,8 +23,5 @@ public class ContextController {
         return contextService.getAllPage(pageNum);
     }
 
-    @RequestMapping("/context/find/{pageNum,pagesize,sort,cSubject,cLanguage}")
-    public Page<Context> findByCondition(@PathVariable("pageNum") Integer pageNum,@PathVariable("pagesize") Integer pagesize,@PathVariable("sort") String sort,@PathVariable("cSubject") String subject,@PathVariable("cLanguage") String language) {
-        return contextService.getAllPagebyCondition(pageNum,pagesize,sort,subject,language);
-    }
+
 }

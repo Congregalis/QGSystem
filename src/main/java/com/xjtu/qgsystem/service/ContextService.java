@@ -39,28 +39,4 @@ public class ContextService {
     }
 
 
-    //新增
-    /**
-     * 返回所有条件查询上下文结果的分页
-     * @param pageNum 第几页
-     * @param pageSize 每页多少条数据
-     * @param sort 排序方式
-     * @param subject 学科
-     * @param language 语言
-     */
-    public Page<Context> getAllPagebyCondition(int pageNum,int pageSize,String sort,String subject,String language) {
-        Pageable pageable=PageRequest.of(pageNum, pageSize,Sort.Direction.DESC);
-        if (sort=="+id"){
-            pageable = PageRequest.of(pageNum, pageSize,Sort.Direction.ASC);
-        }
-        Page<Context> page = contextRepository.findBySubjectAndLanguage(subject,language,  pageable);
-//        //获得总页数(这些数据需要分几页)
-//        System.out.println("查询总页数："+page.getTotalPages());
-//        //获得总记录数（数据库的总记录数）
-//        System.out.println("查询总记录数："+page.getTotalElements());
-//        //得到数据集合列表
-//        System.out.println("数据集合列表:"+page.getContent());
-
-        return page;
-    }
 }

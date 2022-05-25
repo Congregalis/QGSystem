@@ -15,7 +15,6 @@ public interface ContextRepository extends JpaRepository<Context, Long> {
 
     public List<Context> findByTitle(String title);
 
-    public Page<Context> findBySubjectAndLanguage(String subject, String language, Pageable pageable);
 
 
 }
