@@ -9,9 +9,7 @@ import com.xjtu.qgsystem.repository.TypeRepository;
 import com.xjtu.qgsystem.repository.redis.RedisStatisticRepository;
 import com.xjtu.qgsystem.util.RandomUtil;
 import com.xjtu.qgsystem.util.TokenUtil;
-import com.xjtu.qgsystem.vo.QuestionDistributionVO;
-import com.xjtu.qgsystem.vo.QuestionVO;
-import com.xjtu.qgsystem.vo.ScoreVO;
+import com.xjtu.qgsystem.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -307,8 +305,11 @@ public class QuestionService {
     * 将Question对象转换为QuestionVO对象返回给前端
     * */
     public QuestionVO questionToQuestionVo(Question question) {
-        QuestionVO questionVO = (QuestionVO) question;
-        questionVO.setDistractorsArray(questionVO.getDistractors().split("$"));
+        QuestionVO questionVO=new QuestionVO(question);
+        if (questionVO.getDistractors()!=null){
+            questionVO.setDistractorsArray(questionVO.getDistractors().split("$"));
+        }
+        System.out.println(questionVO);
         return questionVO;
     }
     /*
@@ -320,6 +321,30 @@ public class QuestionService {
             tempDistractors += str + "$";
         }
         return tempDistractors;
+    }
+
+    public List<CandQVO> findByCondition(ConditionVO findByConditionVO) {
+        List<CandQVO>list =new ArrayList<>();
+        Integer start=(findByConditionVO.getPage()-1)* findByConditionVO.getPagesize();
+        List<Context> contexts=contextRepository.findByCondition(start,findByConditionVO.getPagesize(),findByConditionVO.getcLanguage(),findByConditionVO.getcTitle(),findByConditionVO.getcSubject());
+        for (Context context:contexts
+             ) {
+            List<Question>questions = questionRepository.findByCId(context.getId());
+
+            List<QuestionVO>questionVOList=new ArrayList<>();
+            for (Question q:questions
+                 ) {
+                questionVOList.add(questionToQuestionVo(q));
+            }
+            CandQVO candQVO=new CandQVO();
+            candQVO.setQuestionVOS(questionVOList);
+            candQVO.setcTitle(context.getTitle());
+            candQVO.setcLanguage(context.getLanguage());
+            candQVO.setcId(context.getId());
+            candQVO.setcText(context.getText());
+            list.add(candQVO);
+        }
+        return list;
     }
 }
 

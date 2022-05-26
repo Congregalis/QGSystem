@@ -85,4 +85,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(value = "select text from question;", nativeQuery = true)
     List<String> findAllName();
+
+    @Query(value = "select * from question where contextId= ?1 ;", nativeQuery = true)
+    List<Question> findByCId(Long id);
 }

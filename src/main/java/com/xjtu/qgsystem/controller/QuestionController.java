@@ -6,6 +6,7 @@ import cn.dev33.satoken.annotation.SaMode;
 import com.xjtu.qgsystem.service.QuestionService;
 import com.xjtu.qgsystem.util.result.Result;
 import com.xjtu.qgsystem.util.result.ResultUtil;
+import com.xjtu.qgsystem.vo.ConditionVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +62,7 @@ public class QuestionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public Result deletedQuestion(@PathVariable("id") Long id) {
         boolean res = questionService.deleteQuestion(id);
-        
+
         return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
     }
 
@@ -91,5 +92,10 @@ public class QuestionController {
 
     @RequestMapping("/difficulty")
     public Result getDifficultyDistribution() {return ResultUtil.success(questionService.getDifficultyDistribution());}
+
+    @RequestMapping("/findbycondition")
+    public Result findByCondition(ConditionVO findByConditionVO){
+            return ResultUtil.success(questionService.findByCondition(findByConditionVO));
+    }
 }
 

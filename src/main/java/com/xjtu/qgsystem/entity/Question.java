@@ -1,5 +1,7 @@
 package com.xjtu.qgsystem.entity;
 
+import org.springframework.beans.BeanUtils;
+
 import javax.persistence.*;
 
 @Entity
@@ -24,6 +26,15 @@ public class Question {
     private String cognitiveType;//认知类型
     private String distractors;//干扰项
     private String whType;
+
+    public Question(Question question) {
+        BeanUtils.copyProperties(question, this);
+    }
+
+    public Question() {
+
+    }
+
 
     public int getIsChecked() {
         return isChecked;
@@ -168,5 +179,29 @@ public class Question {
 
     public void setWhType(String whType) {
         this.whType = whType;
+    }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", answerStart=" + answerStart +
+                ", answerText='" + answerText + '\'' +
+                ", reference=" + reference +
+                ", fluency=" + fluency +
+                ", reasonable=" + reasonable +
+                ", relevance=" + relevance +
+                ", difficulty=" + difficulty +
+                ", checkedTimes=" + checkedTimes +
+                ", score=" + score +
+                ", isDeleted=" + isDeleted +
+                ", userId=" + userId +
+                ", isChecked=" + isChecked +
+                ", questionType='" + questionType + '\'' +
+                ", cognitiveType='" + cognitiveType + '\'' +
+                ", distractors='" + distractors + '\'' +
+                ", whType='" + whType + '\'' +
+                '}';
     }
 }
