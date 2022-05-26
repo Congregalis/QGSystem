@@ -306,10 +306,6 @@ public class QuestionService {
     * */
     public QuestionVO questionToQuestionVo(Question question) {
         QuestionVO questionVO=new QuestionVO(question);
-        if (questionVO.getDistractors()!=null){
-            questionVO.setDistractorsArray(questionVO.getDistractors().split("$"));
-        }
-        System.out.println(questionVO);
         return questionVO;
     }
     /*
