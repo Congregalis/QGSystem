@@ -3,14 +3,23 @@ package com.xjtu.qgsystem.vo;
 
 
 import java.util.List;
-
-public class CandQVO {
+//上下文展示数据模型
+public class ContextShowVO {
      Long cId;
      String cText;
      String cLanguage;
      String cTitle;
      String cSource;
-     List<QuestionVO> questionVOS;
+     String cSubject;
+     List<QuestionVO> qList;
+
+     public String getcSubject() {
+          return cSubject;
+     }
+
+     public void setcSubject(String cSubject) {
+          this.cSubject = cSubject;
+     }
 
      public Long getcId() {
           return cId;
@@ -52,11 +61,11 @@ public class CandQVO {
           this.cSource = cSource;
      }
 
-     public List<QuestionVO> getQuestionVOS() {
-          return questionVOS;
+     public List<QuestionVO> getqList() {
+          return qList;
      }
 
-     public void setQuestionVOS(List<QuestionVO> questionVOS) {
-          this.questionVOS = questionVOS;
+     public void setqList(List<QuestionVO> qList) {
+          this.qList = qList;
      }
 }

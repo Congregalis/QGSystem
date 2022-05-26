@@ -1,8 +1,8 @@
 package com.xjtu.qgsystem.vo;
-
+//用于接受前端筛选条件
 public class ConditionVO {
-    Integer page;
-    Integer pagesize;
+    Integer pageNum;
+    Integer pageLimit;
     String cTitle;
     String cLanguage;
     String cSubject;
@@ -12,20 +12,20 @@ public class ConditionVO {
     Integer qDifficulty;
     Integer qScore;
 
-    public Integer getPage() {
-        return page;
+    public Integer getPageNum() {
+        return pageNum;
     }
 
-    public void setPage(Integer page) {
-        this.page = page;
+    public void setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
     }
 
-    public Integer getPagesize() {
-        return pagesize;
+    public Integer getPageLimit() {
+        return pageLimit;
     }
 
-    public void setPagesize(Integer pagesize) {
-        this.pagesize = pagesize;
+    public void setPageLimit(Integer pageLimit) {
+        this.pageLimit = pageLimit;
     }
 
     public String getcTitle() {

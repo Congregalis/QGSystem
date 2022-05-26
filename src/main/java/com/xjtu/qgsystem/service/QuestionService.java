@@ -319,10 +319,10 @@ public class QuestionService {
         return tempDistractors;
     }
 
-    public List<CandQVO> findByCondition(ConditionVO findByConditionVO) {
-        List<CandQVO>list =new ArrayList<>();
-        Integer start=(findByConditionVO.getPage()-1)* findByConditionVO.getPagesize();
-        List<Context> contexts=contextRepository.findByCondition(start,findByConditionVO.getPagesize(),findByConditionVO.getcLanguage(),findByConditionVO.getcTitle(),findByConditionVO.getcSubject());
+    public List<ContextShowVO> findByCondition(ConditionVO findByConditionVO) {
+        List<ContextShowVO>list =new ArrayList<>();
+        Integer start=(findByConditionVO.getPageNum()-1)* findByConditionVO.getPageLimit();
+        List<Context> contexts=contextRepository.findByCondition(start,findByConditionVO.getPageLimit(),findByConditionVO.getcLanguage(),findByConditionVO.getcTitle(),findByConditionVO.getcSubject());
         for (Context context:contexts
              ) {
             List<Question>questions = questionRepository.findByCId(context.getId());
@@ -332,13 +332,15 @@ public class QuestionService {
                  ) {
                 questionVOList.add(questionToQuestionVo(q));
             }
-            CandQVO candQVO=new CandQVO();
-            candQVO.setQuestionVOS(questionVOList);
-            candQVO.setcTitle(context.getTitle());
-            candQVO.setcLanguage(context.getLanguage());
-            candQVO.setcId(context.getId());
-            candQVO.setcText(context.getText());
-            list.add(candQVO);
+            ContextShowVO contextShowVO =new ContextShowVO();
+            contextShowVO.setcSource(context.getOrigin());
+            contextShowVO.setqList(questionVOList);
+            contextShowVO.setcTitle(context.getTitle());
+            contextShowVO.setcLanguage(context.getLanguage());
+            contextShowVO.setcId(context.getId());
+            contextShowVO.setcText(context.getText());
+            contextShowVO.setcSubject(context.getSubject());
+            list.add(contextShowVO);
         }
         return list;
     }

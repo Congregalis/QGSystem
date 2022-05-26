@@ -8,19 +8,19 @@ import com.xjtu.qgsystem.util.DistractorSplit;
  * @version:v1.0
  */
 public class QuestionVO extends Question {
-    private String[] distractorsArray;
+    private String[] qDistractorList;
 
     public QuestionVO(Question question) {
         super(question);
-        distractorsArray= DistractorSplit.split(this.getDistractors());
+        qDistractorList = DistractorSplit.split(this.getDistractors());
     }
 
-    public String[] getDistractorsArray() {
-        return distractorsArray;
+    public String[] getqDistractorList() {
+        return qDistractorList;
     }
 
-    public void setDistractorsArray(String[] distractorsArray) {
-        this.distractorsArray = distractorsArray;
+    public void setqDistractorList(String[] qDistractorList) {
+        this.qDistractorList = qDistractorList;
     }
 
     @Override
