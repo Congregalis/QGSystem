@@ -2,16 +2,37 @@ package com.xjtu.qgsystem.vo;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 //上下文展示数据模型
 public class ContextShowVO {
-     Long cId;
+     @JsonIgnore
+     Long id;
+     String cId;
      String cText;
      String cLanguage;
      String cTitle;
      String cSource;
      String cSubject;
+     Long total;//数据库中总的上下文数量
      List<QuestionVO> qList;
+
+     public String getcId() {
+          return cId;
+     }
+
+     public void setcId(String cId) {
+          this.cId = cId;
+     }
+
+     public Long getTotal() {
+          return total;
+     }
+
+     public void setTotal(Long total) {
+          this.total = total;
+     }
 
      public String getcSubject() {
           return cSubject;
@@ -21,12 +42,12 @@ public class ContextShowVO {
           this.cSubject = cSubject;
      }
 
-     public Long getcId() {
-          return cId;
+     public Long getId() {
+          return id;
      }
 
-     public void setcId(Long cId) {
-          this.cId = cId;
+     public void setId(Long id) {
+          this.id = id;
      }
 
      public String getcText() {
@@ -67,5 +88,20 @@ public class ContextShowVO {
 
      public void setqList(List<QuestionVO> qList) {
           this.qList = qList;
+     }
+
+     @Override
+     public String toString() {
+          return "ContextShowVO{" +
+                  "id=" + id +
+                  ", cId='" + cId + '\'' +
+                  ", cText='" + cText + '\'' +
+                  ", cLanguage='" + cLanguage + '\'' +
+                  ", cTitle='" + cTitle + '\'' +
+                  ", cSource='" + cSource + '\'' +
+                  ", cSubject='" + cSubject + '\'' +
+                  ", total=" + total +
+                  ", qList=" + qList +
+                  '}';
      }
 }

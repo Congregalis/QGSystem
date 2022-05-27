@@ -319,30 +319,59 @@ public class QuestionService {
         return tempDistractors;
     }
 
+    /**
+     * 根据条件筛选数据
+     * 这个需求实在没想到咋整，干脆直接全部查出来放到列表再切片了
+     */
     public List<ContextShowVO> findByCondition(ConditionVO findByConditionVO) {
         List<ContextShowVO>list =new ArrayList<>();
+        String sort=findByConditionVO.getSort();
         Integer start=(findByConditionVO.getPageNum()-1)* findByConditionVO.getPageLimit();
-        List<Context> contexts=contextRepository.findByCondition(start,findByConditionVO.getPageLimit(),findByConditionVO.getcLanguage(),findByConditionVO.getcTitle(),findByConditionVO.getcSubject());
+        List<Context> contexts=contextRepository.findByCondition(findByConditionVO.getcLanguage(),findByConditionVO.getcTitle(),findByConditionVO.getcSubject(),findByConditionVO.getcSource());
+        //这。。。也算是排序吧
+        if (sort.equals("-id")){
+            Collections.reverse(contexts);
+        }
+        Long total=0L;
         for (Context context:contexts
              ) {
-            List<Question>questions = questionRepository.findByCId(context.getId());
-
+            List<Question>questions = questionRepository.findByCondition(context.getId(),findByConditionVO.getqType(),findByConditionVO.getqQwType(),findByConditionVO.getqCognitiveType(),findByConditionVO.getqFluency(),findByConditionVO.getqRelevance(),findByConditionVO.getqDifficulty(),findByConditionVO.getqReasonability(),findByConditionVO.getqScore());
             List<QuestionVO>questionVOList=new ArrayList<>();
             for (Question q:questions
                  ) {
                 questionVOList.add(questionToQuestionVo(q));
             }
-            ContextShowVO contextShowVO =new ContextShowVO();
-            contextShowVO.setcSource(context.getOrigin());
-            contextShowVO.setqList(questionVOList);
-            contextShowVO.setcTitle(context.getTitle());
-            contextShowVO.setcLanguage(context.getLanguage());
-            contextShowVO.setcId(context.getId());
-            contextShowVO.setcText(context.getText());
-            contextShowVO.setcSubject(context.getSubject());
-            list.add(contextShowVO);
+            if (questions.size()!=0){
+                ContextShowVO contextShowVO =new ContextShowVO();
+                contextShowVO.setcSource(context.getOrigin());
+                contextShowVO.setcTitle(context.getTitle());
+                contextShowVO.setcLanguage(context.getLanguage());
+                contextShowVO.setId(context.getId());
+                contextShowVO.setcId(Long.toString(context.getId()));
+                contextShowVO.setcText(context.getText());
+                contextShowVO.setcSubject(context.getSubject());
+                contextShowVO.setqList(questionVOList);
+                list.add(contextShowVO);
+            }
         }
-        return list;
+        total=(long)list.size();
+        for (ContextShowVO c:list
+             ) {
+            c.setTotal(total);
+        }
+        Integer end=start+findByConditionVO.getPageLimit();
+        if (start<total){
+            if (end<=total){
+                ArrayList<ContextShowVO> result = new ArrayList<>(list.subList(start, end));
+                return result;
+            }else {
+                ArrayList<ContextShowVO> result = new ArrayList<>(list.subList(start, total.intValue()));
+                return result;
+            }
+        }else{
+            ArrayList<ContextShowVO> result = new ArrayList<>();
+            return result;
+        }
     }
 }
 

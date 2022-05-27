@@ -3,14 +3,59 @@ package com.xjtu.qgsystem.vo;
 public class ConditionVO {
     Integer pageNum;
     Integer pageLimit;
+    String sort;
     String cTitle;
     String cLanguage;
     String cSubject;
+    String cSource;
+    String qType;
+    String qQwType;
+    String qCognitiveType;
     Integer qFluency;
-    Integer qReasonability;
     Integer qRelevance;
     Integer qDifficulty;
+    Integer qReasonability;
     Integer qScore;
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getcSource() {
+        return cSource;
+    }
+
+    public void setcSource(String cSource) {
+        this.cSource = cSource;
+    }
+
+    public String getqType() {
+        return qType;
+    }
+
+    public void setqType(String qType) {
+        this.qType = qType;
+    }
+
+    public String getqQwType() {
+        return qQwType;
+    }
+
+    public void setqQwType(String qQwType) {
+        this.qQwType = qQwType;
+    }
+
+    public String getqCognitiveType() {
+        return qCognitiveType;
+    }
+
+    public void setqCognitiveType(String qCognitiveType) {
+        this.qCognitiveType = qCognitiveType;
+    }
 
     public Integer getPageNum() {
         return pageNum;

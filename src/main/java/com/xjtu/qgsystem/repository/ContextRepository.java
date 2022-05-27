@@ -12,6 +12,10 @@ public interface ContextRepository extends JpaRepository<Context, Long> {
     public Optional<Context> findById(Long id);
 
     public List<Context> findByTitle(String title);
-    @Query(value = "select * from context where language = ?3 and title= ?4 and subject= ?5 limit ?1,?2 ;", nativeQuery = true)
-    List<Context> findByCondition(Integer start, Integer pagesize, String getcLanguage, String getcTitle, String getcSubject);
+
+    @Query(value = "select count(*) from context where language = ?1 and title= ?2 and subject= ?3 ;", nativeQuery = true)
+    Long countContext(String s, String getcTitle, String getcSubject);
+
+    @Query(value = "select * from context where if(?1 !='',language = ?1,1=1)  and if(?2 !='',title = ?2,1=1) and if(?3 !='',subject = ?3,1=1) and if(?4 !='',origin = ?4,1=1) order by id ;", nativeQuery = true)
+    List<Context> findByCondition(String language, String title, String subject, String source);
 }
