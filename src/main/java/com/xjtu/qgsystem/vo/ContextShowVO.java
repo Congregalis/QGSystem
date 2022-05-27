@@ -15,6 +15,7 @@ public class ContextShowVO {
      String cTitle;
      String cSource;
      String cSubject;
+     @JsonIgnore
      Long total;//数据库中总的上下文数量
      List<QuestionVO> qList;
 

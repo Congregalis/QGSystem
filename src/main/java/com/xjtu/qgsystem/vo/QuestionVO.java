@@ -1,7 +1,6 @@
 package com.xjtu.qgsystem.vo;
 
 //import com.sun.org.apache.bcel.internal.generic.I2F;
-import com.xjtu.qgsystem.entity.Context;
 import com.xjtu.qgsystem.entity.Question;
 import com.xjtu.qgsystem.util.DistractorSplit;
 
@@ -22,7 +21,7 @@ public class QuestionVO {
     private int qDifficulty;//难度
     private int qCheckedTimes;
     private int qScore;
-    private String [] UserIdList;
+    private String [] qEvaluatorList;
     private boolean qIsChecked;//是否标注过0、1
     private String qType;//题型
     private String qCognitiveType;//认知类型
@@ -44,7 +43,7 @@ public class QuestionVO {
         this.qCheckedTimes=question.getCheckedTimes();
         this.qScore=question.getScore();
         if (question.getUserId()!=null){
-            this.UserIdList=DistractorSplit.split(Long.toString(question.getUserId()));
+            this.qEvaluatorList =DistractorSplit.split(Long.toString(question.getUserId()));
         }
 
         if (question.getIsChecked()==0){
@@ -145,12 +144,12 @@ public class QuestionVO {
         this.qScore = qScore;
     }
 
-    public String[] getUserIdList() {
-        return UserIdList;
+    public String[] getqEvaluatorList() {
+        return qEvaluatorList;
     }
 
-    public void setUserIdList(String[] userIdList) {
-        UserIdList = userIdList;
+    public void setqEvaluatorList(String[] qEvaluatorList) {
+        this.qEvaluatorList = qEvaluatorList;
     }
 
     public boolean isqIsChecked() {
@@ -198,7 +197,7 @@ public class QuestionVO {
                 ", qDifficulty=" + qDifficulty +
                 ", qCheckedTimes=" + qCheckedTimes +
                 ", qScore=" + qScore +
-                ", UserIdList=" + Arrays.toString(UserIdList) +
+                ", UserIdList=" + Arrays.toString(qEvaluatorList) +
                 ", qIsChecked=" + qIsChecked +
                 ", qType='" + qType + '\'' +
                 ", qCognitiveType='" + qCognitiveType + '\'' +

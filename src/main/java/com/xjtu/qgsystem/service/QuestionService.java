@@ -323,7 +323,7 @@ public class QuestionService {
      * 根据条件筛选数据
      * 这个需求实在没想到咋整，干脆直接全部查出来放到列表再切片了
      */
-    public List<ContextShowVO> findByCondition(ConditionVO findByConditionVO) {
+    public DataVo findByCondition(ConditionVO findByConditionVO) {
         List<ContextShowVO>list =new ArrayList<>();
         String sort=findByConditionVO.getSort();
         Integer start=(findByConditionVO.getPageNum()-1)* findByConditionVO.getPageLimit();
@@ -355,22 +355,27 @@ public class QuestionService {
             }
         }
         total=(long)list.size();
-        for (ContextShowVO c:list
-             ) {
-            c.setTotal(total);
-        }
         Integer end=start+findByConditionVO.getPageLimit();
         if (start<total){
             if (end<=total){
                 ArrayList<ContextShowVO> result = new ArrayList<>(list.subList(start, end));
-                return result;
+                DataVo dataVo=new DataVo();
+                dataVo.setDataList(result);
+                dataVo.setTotal(total);
+                return dataVo;
             }else {
                 ArrayList<ContextShowVO> result = new ArrayList<>(list.subList(start, total.intValue()));
-                return result;
+                DataVo dataVo=new DataVo();
+                dataVo.setDataList(result);
+                dataVo.setTotal(total);
+                return dataVo;
             }
         }else{
             ArrayList<ContextShowVO> result = new ArrayList<>();
-            return result;
+            DataVo dataVo=new DataVo();
+            dataVo.setDataList(result);
+            dataVo.setTotal(total);
+            return dataVo;
         }
     }
 }
