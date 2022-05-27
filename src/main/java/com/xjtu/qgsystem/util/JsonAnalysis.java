@@ -13,7 +13,7 @@ public class JsonAnalysis {
     public static void main(String[] args) throws SQLException {
         String json = "null";
         try {
-            json = readJsonData("Chinese.json");
+            json = readJsonData("History.json");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.xjtu.qgsystem.vo;
 
 //import com.sun.org.apache.bcel.internal.generic.I2F;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xjtu.qgsystem.entity.Question;
 import com.xjtu.qgsystem.util.DistractorSplit;
 
@@ -13,6 +14,7 @@ import java.util.Arrays;
 public class QuestionVO {
     private String qId;
     private String qText;//内容
+    @JsonIgnore
     private int aStart = -1;
     private String qAnswer;//
     private int qFluency;//
@@ -21,7 +23,7 @@ public class QuestionVO {
     private int qDifficulty;//难度
     private int qCheckedTimes;
     private int qScore;
-    private String [] qEvaluatorList;
+    private String [] qEvaluatorList={};
     private boolean qIsChecked;//是否标注过0、1
     private String qType;//题型
     private String qCognitiveType;//认知类型

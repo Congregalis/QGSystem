@@ -21,7 +21,7 @@ public class Question {
     private int isDeleted;
     private Long userId;
 
-    private int isChecked;//是否标注过0、1
+    private int isChecked=0;//是否标注过0、1
     private String questionType;//题型
     private String cognitiveType;//认知类型
     private String distractors;//干扰项
