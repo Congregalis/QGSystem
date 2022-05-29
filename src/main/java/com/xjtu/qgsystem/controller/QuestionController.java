@@ -118,8 +118,6 @@ public class QuestionController {
     public Result deletedQuestion(@RequestParam(value = "cId", required = true) String cId,
                                   @RequestParam(value = "qId", required = true) String qId) {
         boolean res = questionService.deleteQuestion(Long.parseLong(cId), Long.parseLong(qId));
-        System.out.println(cId);
-        System.out.println(qId);
         return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
     }
 }
