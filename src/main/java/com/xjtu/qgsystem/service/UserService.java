@@ -32,7 +32,7 @@ public class UserService {
         User user = byUsername.get();
 
         // md5方式存储在数据库
-        if ((user.getPassword().equals(md5(password)))) {
+        if ((user.getPassword().equals(password))) {
             String token = TokenUtil.getInstance().generateToken(user);
 
             // 若该用户已在线上，则踢下线，使新登陆的客户端上线
