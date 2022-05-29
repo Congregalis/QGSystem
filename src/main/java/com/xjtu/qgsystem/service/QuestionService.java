@@ -166,12 +166,14 @@ public class QuestionService {
      * 生成随机的未被评分的问题
      * @return 随机的未被评分的问题
      */
-    public QuestionVO getRandomQuestion() {
+    public WithTextQuesVO getRandomQuestion() {
         long randomId = RandomUtil.getRandomNum(questionRepository.findCountOfUnchecked());
         Optional<Question> questionOptional = questionRepository.findQuestionRandomly();
-
-        return questionToQuestionVo(questionOptional.orElse(null));
-
+        Question question=questionOptional.get();
+        Context context=question.getReference();
+        WithTextQuesVO withTextQuesVO=new WithTextQuesVO(question);
+        withTextQuesVO.setcText(context.getText());
+        return withTextQuesVO;
     }
 
     /**
@@ -192,6 +194,8 @@ public class QuestionService {
         }
         return res;
     }
+
+
 
     /**
      * 获取根据 difficulty 划分的问题分布
