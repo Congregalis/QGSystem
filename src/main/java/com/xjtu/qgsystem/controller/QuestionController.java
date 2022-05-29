@@ -114,7 +114,7 @@ public class QuestionController {
         return ResultUtil.success(questionService.updateContextAndQuestion(cId, cTitle, cText, qId, qText, qAnswer, qFluency, qReasonability, qRelevence, qDifficulty, qDistractorList));
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public Result deletedQuestion(@RequestParam(value = "cId", required = true) String cId,
                                   @RequestParam(value = "qId", required = true) String qId) {
         boolean res = questionService.deleteQuestion(Long.parseLong(cId), Long.parseLong(qId));
