@@ -173,6 +173,7 @@ public class QuestionService {
         Context context=question.getReference();
         WithTextQuesVO withTextQuesVO=new WithTextQuesVO(question);
         withTextQuesVO.setcText(context.getText());
+        withTextQuesVO.setcTitle(context.getTitle());
         return withTextQuesVO;
     }
 
