@@ -16,6 +16,8 @@ import java.util.*;
 
 import cn.hutool.*;
 
+import static com.xjtu.qgsystem.util.MD5Util.md5;
+
 @Service
 public class UserService {
     private final String secret = "QG_SYSTEM_SERVER";
@@ -29,8 +31,8 @@ public class UserService {
 
         User user = byUsername.get();
 
-        // todo: 密码暂时先用明文存在数据库中，后续更换更安全待方式
-        if (user.getPassword().equals(password)) {
+        // md5方式存储在数据库
+        if ((user.getPassword().equals(password))) {
             String token = TokenUtil.getInstance().generateToken(user);
 
             // 若该用户已在线上，则踢下线，使新登陆的客户端上线

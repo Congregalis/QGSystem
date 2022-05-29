@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Config ###
-resources/application.properties
-resources/db.properties
+src/main/resources/application.properties
+src/main/resources/db.properties
