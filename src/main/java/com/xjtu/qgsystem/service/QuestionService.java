@@ -85,38 +85,38 @@ public class QuestionService {
         return questionToQuestionVo(question);
     }
 
-    /**
-     *
-     * @param id 问题id
-     * @param contextId 上下文id
-     * @param context 修改的上下文文本
-     * @param question 修改的问题
-     * @param answer 修改的答案
-     * @param questionType 修改的问题类型
-     * @param cognitiveType 修改的认知类型
-     * @param distractorsArray 修改的干扰项
-     * @param whType 修改的wh类型
-     * @return 修改后的问题
-     */
-    public QuestionVO updateQuestion(Long id, Long contextId, String context, String question, String answer, String questionType, String cognitiveType, String[] distractorsArray, String whType) {
-        Question q = questionRepository.findById(id).get();
-        Context c = contextRepository.findById(contextId).get();
-        q.setText(question);
-        q.setAnswerText(answer);
-        q.setQuestionType(questionType);
-        q.setCognitiveType(cognitiveType);
-        q.setDistractors(distractorsArrayToString(distractorsArray));
-        q.setWhType(whType);
-        /**
-         * todo: 此外，还要判断 answerStart 是否改变，再去做修改
-         */
-        c.setText(context);
-        contextRepository.save(c);
-        q.setReference(c);
-        questionRepository.save(q);
-
-        return questionToQuestionVo(q);
-    }
+//    /**
+//     *
+//     * @param id 问题id
+//     * @param contextId 上下文id
+//     * @param context 修改的上下文文本
+//     * @param question 修改的问题
+//     * @param answer 修改的答案
+//     * @param questionType 修改的问题类型
+//     * @param cognitiveType 修改的认知类型
+//     * @param distractorsArray 修改的干扰项
+//     * @param whType 修改的wh类型
+//     * @return 修改后的问题
+//     */
+//    public QuestionVO updateQuestion(Long id, Long contextId, String context, String question, String answer, String questionType, String cognitiveType, String[] distractorsArray, String whType) {
+//        Question q = questionRepository.findById(id).get();
+//        Context c = contextRepository.findById(contextId).get();
+//        q.setText(question);
+//        q.setAnswerText(answer);
+//        q.setQuestionType(questionType);
+//        q.setCognitiveType(cognitiveType);
+//        q.setDistractors(distractorsArrayToString(distractorsArray));
+//        q.setWhType(whType);
+//        /**
+//         * todo: 此外，还要判断 answerStart 是否改变，再去做修改
+//         */
+//        c.setText(context);
+//        contextRepository.save(c);
+//        q.setReference(c);
+//        questionRepository.save(q);
+//
+//        return questionToQuestionVo(q);
+//    }
 
     /**
      * 为一个问题打分
@@ -139,18 +139,18 @@ public class QuestionService {
         return questionToQuestionVo(q);
     }
 
-    /**
-     * 删除问题，实际是给 isDeleted 字段赋 1，实现懒删除
-     * @param id 问题id
-     * @return 是否删除成功
-     */
-    public boolean deleteQuestion(Long id) {
-        Question q = questionRepository.findById(id).get();
-        q.setIsDeleted(1);
-        questionRepository.save(q);
-
-        return true;
-    }
+//    /**
+//     * 删除问题，实际是给 isDeleted 字段赋 1，实现懒删除
+//     * @param id 问题id
+//     * @return 是否删除成功
+//     */
+//    public boolean deleteQuestion(Long id) {
+//        Question q = questionRepository.findById(id).get();
+//        q.setIsDeleted(1);
+//        questionRepository.save(q);
+//
+//        return true;
+//    }
 
     /**
      * 基本的 根据id获取问题
@@ -377,6 +377,53 @@ public class QuestionService {
             dataVo.setTotal(total);
             return dataVo;
         }
+    }
+
+    /**
+     * 更新 上下文
+     * 以及 问题
+     * 干扰项
+     * String cId,
+     * String cTitle,
+     * String cText,
+     * String qId,
+     * String qText,
+     * String qAnswer,
+     * String qFluency,
+     * String qReasonability,
+     * String qRelevence,
+     * String qDifficulty,
+     * String qDistractorList
+     */
+    public QuestionVO updateContextAndQuestion(String cId, String cTitle, String cText, String qId, String qText, String qAnswer, String qFluency, String qReasonability, String qRelevence, String qDifficulty, String qDistractorList) {
+        Context c = contextRepository.findById(Long.parseLong(cId)).get();
+        c.setTitle(cTitle);
+        c.setText(cText);
+        Question q = questionRepository.findById(Long.parseLong(qId)).get();
+        q.setText(qText);
+        q.setAnswerText(qAnswer);
+        q.setFluency(Integer.parseInt(qFluency));
+        q.setReasonable(Integer.parseInt(qReasonability));
+        q.setRelevance(Integer.parseInt(qRelevence));
+        q.setDifficulty(Integer.parseInt(qDifficulty));
+        q.setDistractors(qDistractorList);
+        contextRepository.save(c);
+        questionRepository.save(q);
+        return questionToQuestionVo(q);
+    }
+
+    /**
+     * 删除问题，
+     * @param qId 问题id
+     * @param cId 文本id
+     * @return 是否删除成功
+     */
+    public boolean deleteQuestion(Long cId, Long qId) {
+        Question q = questionRepository.findById(qId).get();
+        q.setIsDeleted(1);
+        questionRepository.save(q);
+
+        return true;
     }
 }
 
