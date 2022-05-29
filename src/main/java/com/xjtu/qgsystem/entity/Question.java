@@ -1,5 +1,6 @@
 package com.xjtu.qgsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
@@ -16,11 +17,12 @@ public class Question {
     private int reasonable;//
     private int relevance;//
     private int difficulty;//难度
-    private int checkedTimes;
+    private int checkedTimes;//当标注次数大于2的时候才吧isChecked设置为1
     private int score;
     private int isDeleted;
     private Long userId;
-
+    @JsonIgnore
+    private String userList;//标注者的名字，用$分割
     private int isChecked=0;//是否标注过0、1
     private String questionType;//题型
     private String cognitiveType;//认知类型
@@ -35,6 +37,13 @@ public class Question {
 
     }
 
+    public String getUserList() {
+        return userList;
+    }
+
+    public void setUserList(String userList) {
+        this.userList = userList;
+    }
 
     public int getIsChecked() {
         return isChecked;
