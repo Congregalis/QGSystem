@@ -6,6 +6,7 @@ import com.xjtu.qgsystem.entity.Question;
 public class WithTextQuesVO extends QuestionVO{
     private String cText;
     private String cTitle;
+    private String cId;
     @JsonIgnore
     private String qCheckedTimes;
     @JsonIgnore
@@ -20,8 +21,7 @@ public class WithTextQuesVO extends QuestionVO{
     private String qCognitiveType;
     @JsonIgnore
     private String qQwType;
-    @JsonIgnore
-    private String qId;
+
 
     public WithTextQuesVO(Question question) {
         super(question);
@@ -33,6 +33,14 @@ public class WithTextQuesVO extends QuestionVO{
 
     public void setcText(String cText) {
         this.cText = cText;
+    }
+
+    public String getcId() {
+        return cId;
+    }
+
+    public void setcId(String cId) {
+        this.cId = cId;
     }
 
     public String getcTitle() {

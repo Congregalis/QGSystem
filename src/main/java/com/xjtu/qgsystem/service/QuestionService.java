@@ -174,6 +174,7 @@ public class QuestionService {
         WithTextQuesVO withTextQuesVO=new WithTextQuesVO(question);
         withTextQuesVO.setcText(context.getText());
         withTextQuesVO.setcTitle(context.getTitle());
+        withTextQuesVO.setcId(Long.toString(context.getId()));
         return withTextQuesVO;
     }
 
