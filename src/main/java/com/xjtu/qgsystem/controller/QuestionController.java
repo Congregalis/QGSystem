@@ -66,7 +66,7 @@ public class QuestionController {
 //        return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
 //    }
 
-    @SaCheckRole(value = {"annotator", "admin"}, mode = SaMode.OR)
+//    @SaCheckRole(value = {"annotator", "admin"}, mode = SaMode.OR)
     @RequestMapping("/random")
     public Result getRandomQuestion() {
         return ResultUtil.success(questionService.getRandomQuestion());
@@ -104,7 +104,7 @@ public class QuestionController {
         return ResultUtil.success(questionService.updateContextAndQuestion(cTitle, cText, qId, qText, qAnswer, qFluency, qReasonability, qRelevence, qDifficulty, qDistractorList));
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public Result deletedQuestion(String qId) {
         boolean res = questionService.deleteQuestion(Long.parseLong(qId));
         return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
