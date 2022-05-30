@@ -99,25 +99,14 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Result updateContextAndQuestion(@RequestParam(value = "cId", required = true) String cId,
-                                 @RequestParam(value = "cTitle", required = true) String cTitle,
-                                 @RequestParam(value = "cText", required = true) String cText,
-                                 @RequestParam(value = "qId", required = true) String qId,
-                                 @RequestParam(value = "qText", required = true) String qText,
-                                 @RequestParam(value = "qAnswer", required = true) String qAnswer,
-                                 @RequestParam(value = "qFluency", required = true) String qFluency,
-                                 @RequestParam(value = "qReasonability", required = true) String qReasonability,
-                                 @RequestParam(value = "qRelevence", required = true) String qRelevence,
-                                 @RequestParam(value = "qDifficulty", required = true) String qDifficulty,
-                                 @RequestParam(value = "qDistractorList", required = true) String qDistractorList) {
+    public Result updateContextAndQuestion(String cTitle, String cText, String qId, String qText, String qAnswer, String qFluency, String qReasonability, String qRelevence, String qDifficulty, String qDistractorList) {
         System.out.println(qDistractorList);
-        return ResultUtil.success(questionService.updateContextAndQuestion(cId, cTitle, cText, qId, qText, qAnswer, qFluency, qReasonability, qRelevence, qDifficulty, qDistractorList));
+        return ResultUtil.success(questionService.updateContextAndQuestion(cTitle, cText, qId, qText, qAnswer, qFluency, qReasonability, qRelevence, qDifficulty, qDistractorList));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.DELETE)
-    public Result deletedQuestion(@RequestParam(value = "cId", required = true) String cId,
-                                  @RequestParam(value = "qId", required = true) String qId) {
-        boolean res = questionService.deleteQuestion(Long.parseLong(cId), Long.parseLong(qId));
+    public Result deletedQuestion(String qId) {
+        boolean res = questionService.deleteQuestion(Long.parseLong(qId));
         return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
     }
 }
