@@ -174,7 +174,6 @@ public class QuestionService {
         WithTextQuesVO withTextQuesVO=new WithTextQuesVO(question);
         withTextQuesVO.setcText(context.getText());
         withTextQuesVO.setcTitle(context.getTitle());
-        withTextQuesVO.setcId(Long.toString(context.getId()));
         return withTextQuesVO;
     }
 
@@ -317,11 +316,11 @@ public class QuestionService {
     /*
      * array转String
      * */
-    public String distractorsArrayToString(String[] distractorsArray) {
-        String tempDistractors = "";
-        for(String str : distractorsArray) {
-            tempDistractors += str + "$";
-        }
+    public String distractorsArrayToString(String distractorsArray) {
+        String tempDistractors = distractorsArray.replace("\"","");
+        tempDistractors = tempDistractors.replace("[","");
+        tempDistractors = tempDistractors.replace("]","");
+        tempDistractors = tempDistractors.replace(",","$");
         return tempDistractors;
     }
 
@@ -401,18 +400,19 @@ public class QuestionService {
      * String qDifficulty,
      * String qDistractorList
      */
-    public QuestionVO updateContextAndQuestion(String cId, String cTitle, String cText, String qId, String qText, String qAnswer, String qFluency, String qReasonability, String qRelevence, String qDifficulty, String qDistractorList) {
-        Context c = contextRepository.findById(Long.parseLong(cId)).get();
+    public QuestionVO updateContextAndQuestion(String cTitle, String cText, String qId, String qText, String qAnswer, String qFluency, String qReasonability, String qRelevence, String qDifficulty, String qDistractorList) {
+        Question q = questionRepository.findById(Long.parseLong(qId)).get();
+        Long cId = q.getReference().getId();
+        Context c = contextRepository.findById(cId).get();
         c.setTitle(cTitle);
         c.setText(cText);
-        Question q = questionRepository.findById(Long.parseLong(qId)).get();
         q.setText(qText);
         q.setAnswerText(qAnswer);
         q.setFluency(Integer.parseInt(qFluency));
         q.setReasonable(Integer.parseInt(qReasonability));
         q.setRelevance(Integer.parseInt(qRelevence));
         q.setDifficulty(Integer.parseInt(qDifficulty));
-        q.setDistractors(qDistractorList);
+        q.setDistractors(distractorsArrayToString(qDistractorList));
         contextRepository.save(c);
         questionRepository.save(q);
         return questionToQuestionVo(q);
@@ -421,10 +421,9 @@ public class QuestionService {
     /**
      * 删除问题，
      * @param qId 问题id
-     * @param cId 文本id
      * @return 是否删除成功
      */
-    public boolean deleteQuestion(Long cId, Long qId) {
+    public boolean deleteQuestion(Long qId) {
         Question q = questionRepository.findById(qId).get();
         q.setIsDeleted(1);
         questionRepository.save(q);
