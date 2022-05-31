@@ -7,6 +7,7 @@ import com.xjtu.qgsystem.service.QuestionService;
 import com.xjtu.qgsystem.util.result.Result;
 import com.xjtu.qgsystem.util.result.ResultUtil;
 import com.xjtu.qgsystem.vo.ConditionVO;
+import com.xjtu.qgsystem.vo.GetFrontUpdateParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -99,9 +100,11 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Result updateContextAndQuestion(String cTitle, String cText, String qId, String qText, String qAnswer, Integer qFluency, Integer qReasonability, Integer qRelevence, Integer qDifficulty, String qDistractorList) {
-        System.out.println(qDistractorList);
-        return ResultUtil.success(questionService.updateContextAndQuestion(cTitle, cText, qId, qText, qAnswer, qFluency, qReasonability, qRelevence, qDifficulty, qDistractorList));
+    public Result updateContextAndQuestion(@RequestBody GetFrontUpdateParam updateParam) {
+        System.out.println("------");
+        System.out.println(updateParam.toString());
+        System.out.println("------");
+        return ResultUtil.success(questionService.updateContextAndQuestion(updateParam));
     }
 
     @RequestMapping(value = "/delete/{qid}", method = RequestMethod.DELETE)

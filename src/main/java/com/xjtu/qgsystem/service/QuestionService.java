@@ -321,6 +321,7 @@ public class QuestionService {
         tempDistractors = tempDistractors.replace("[","");
         tempDistractors = tempDistractors.replace("]","");
         tempDistractors = tempDistractors.replace(",","$");
+        tempDistractors = tempDistractors.replace("\\","");
         return tempDistractors;
     }
 
@@ -400,19 +401,19 @@ public class QuestionService {
      * String qDifficulty,
      * String qDistractorList
      */
-    public QuestionVO updateContextAndQuestion(String cTitle, String cText, String qId, String qText, String qAnswer, Integer qFluency, Integer qReasonability, Integer qRelevence, Integer qDifficulty, String qDistractorList) {
-        Question q = questionRepository.findById(Long.parseLong(qId)).get();
+    public QuestionVO updateContextAndQuestion(GetFrontUpdateParam updateParam) {
+        Question q = questionRepository.findById(Long.parseLong(updateParam.getqId().trim())).get();
         Long cId = q.getReference().getId();
         Context c = contextRepository.findById(cId).get();
-        c.setTitle(cTitle);
-        c.setText(cText);
-        q.setText(qText);
-        q.setAnswerText(qAnswer);
-        q.setFluency(qFluency);
-        q.setReasonable(qReasonability);
-        q.setRelevance(qRelevence);
-        q.setDifficulty(qDifficulty);
-        q.setDistractors(distractorsArrayToString(qDistractorList));
+        c.setTitle(updateParam.getcTitle());
+        c.setText(updateParam.getcText());
+        q.setText(updateParam.getqText());
+        q.setAnswerText(updateParam.getqAnswer());
+        q.setFluency(updateParam.getqFluency());
+        q.setReasonable(updateParam.getqReasonability());
+        q.setRelevance(updateParam.getqRelevance());
+        q.setDifficulty(updateParam.getqDifficulty());
+        q.setDistractors(distractorsArrayToString(updateParam.getqDistractorList()));
         contextRepository.save(c);
         questionRepository.save(q);
         return questionToQuestionVo(q);
