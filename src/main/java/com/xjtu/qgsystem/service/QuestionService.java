@@ -400,7 +400,7 @@ public class QuestionService {
      * String qDifficulty,
      * String qDistractorList
      */
-    public QuestionVO updateContextAndQuestion(String cTitle, String cText, String qId, String qText, String qAnswer, String qFluency, String qReasonability, String qRelevence, String qDifficulty, String qDistractorList) {
+    public QuestionVO updateContextAndQuestion(String cTitle, String cText, String qId, String qText, String qAnswer, Integer qFluency, Integer qReasonability, Integer qRelevence, Integer qDifficulty, String qDistractorList) {
         Question q = questionRepository.findById(Long.parseLong(qId)).get();
         Long cId = q.getReference().getId();
         Context c = contextRepository.findById(cId).get();
@@ -408,10 +408,10 @@ public class QuestionService {
         c.setText(cText);
         q.setText(qText);
         q.setAnswerText(qAnswer);
-        q.setFluency(Integer.parseInt(qFluency));
-        q.setReasonable(Integer.parseInt(qReasonability));
-        q.setRelevance(Integer.parseInt(qRelevence));
-        q.setDifficulty(Integer.parseInt(qDifficulty));
+        q.setFluency(qFluency);
+        q.setReasonable(qReasonability);
+        q.setRelevance(qRelevence);
+        q.setDifficulty(qDifficulty);
         q.setDistractors(distractorsArrayToString(qDistractorList));
         contextRepository.save(c);
         questionRepository.save(q);
