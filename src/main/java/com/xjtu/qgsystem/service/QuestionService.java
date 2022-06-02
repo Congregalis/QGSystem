@@ -415,6 +415,7 @@ public class QuestionService {
         q.setDifficulty(updateParam.getqDifficulty());
         q.setDistractors(distractorsArrayToString(updateParam.getqDistractorList()));
         contextRepository.save(c);
+
         questionRepository.save(q);
         return questionToQuestionVo(q);
     }
