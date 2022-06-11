@@ -28,12 +28,14 @@ public class QuestionVO {
     private String qType;//题型
     private String qCognitiveType;//认知类型
     private String qQwType;
-    private String[] qDistractorList;
+    private String[] qDistractorList={};
     public QuestionVO(){
 
     }
     public QuestionVO(Question question) {
-        this.qDistractorList = DistractorSplit.split(question.getDistractors());
+        if (question.getDistractors()!=null){
+            this.qDistractorList = DistractorSplit.split(question.getDistractors());
+        }
         this.aStart=question.getAnswerStart();
         this.qAnswer= question.getAnswerText();
         this.qId=Long.toString(question.getId());

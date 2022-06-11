@@ -96,7 +96,6 @@ public class QuestionController {
 
     @RequestMapping(value="/findbycondition",method = RequestMethod.POST)
     public Result findByCondition(@RequestBody ConditionVO findByConditionVO){
-        System.out.println(findByConditionVO);
             return ResultUtil.success(questionService.findByCondition(findByConditionVO));
     }
 
