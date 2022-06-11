@@ -94,8 +94,9 @@ public class QuestionController {
     @RequestMapping("/difficulty")
     public Result getDifficultyDistribution() {return ResultUtil.success(questionService.getDifficultyDistribution());}
 
-    @RequestMapping("/findbycondition")
-    public Result findByCondition(ConditionVO findByConditionVO){
+    @RequestMapping(value="/findbycondition",method = RequestMethod.POST)
+    public Result findByCondition(@RequestBody ConditionVO findByConditionVO){
+        System.out.println(findByConditionVO);
             return ResultUtil.success(questionService.findByCondition(findByConditionVO));
     }
 

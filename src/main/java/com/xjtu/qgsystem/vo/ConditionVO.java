@@ -136,4 +136,25 @@ public class ConditionVO {
     public void setqScore(Integer qScore) {
         this.qScore = qScore;
     }
+
+    @Override
+    public String toString() {
+        return "ConditionVO{" +
+                "pageNum=" + pageNum +
+                ", pageLimit=" + pageLimit +
+                ", sort='" + sort + '\'' +
+                ", cTitle='" + cTitle + '\'' +
+                ", cLanguage='" + cLanguage + '\'' +
+                ", cSubject='" + cSubject + '\'' +
+                ", cSource='" + cSource + '\'' +
+                ", qType='" + qType + '\'' +
+                ", qQwType='" + qQwType + '\'' +
+                ", qCognitiveType='" + qCognitiveType + '\'' +
+                ", qFluency=" + qFluency +
+                ", qRelevance=" + qRelevance +
+                ", qDifficulty=" + qDifficulty +
+                ", qReasonability=" + qReasonability +
+                ", qScore=" + qScore +
+                '}';
+    }
 }
