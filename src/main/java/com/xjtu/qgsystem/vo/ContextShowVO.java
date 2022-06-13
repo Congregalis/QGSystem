@@ -4,6 +4,7 @@ package com.xjtu.qgsystem.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.ArrayList;
 import java.util.List;
 //上下文展示数据模型
 public class ContextShowVO {
@@ -17,7 +18,7 @@ public class ContextShowVO {
      String cSubject;
      @JsonIgnore
      Long total;//数据库中总的上下文数量
-     List<QuestionVO> qList;
+     List<QuestionVO> qList=new ArrayList<>();
 
      public String getcId() {
           return cId;

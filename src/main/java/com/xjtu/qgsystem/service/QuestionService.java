@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigInteger;
 import java.util.*;
@@ -41,6 +42,7 @@ public class QuestionService {
 
     /**
      * 返回所有查询结果的分页
+     *
      * @param pageNum 第几页
      */
     public Page<QuestionVO> getAllPage(int pageNum) {
@@ -52,8 +54,9 @@ public class QuestionService {
 
     /**
      * 根据用户 token 获取用户评估过的所有问题
+     *
      * @param pageNum 第几页
-     * @param token 用户的token
+     * @param token   用户的token
      * @return 分页结果
      */
     public Page<QuestionVO> getCheckedPageByToken(int pageNum, String token) {
@@ -63,21 +66,22 @@ public class QuestionService {
         return listConvertToPage(page, pageable);
     }
 
-//   QuestionVO类型的列表
+    //   QuestionVO类型的列表
 //    转换为 Page类型
     public Page<QuestionVO> listConvertToPage(Page<Question> page, Pageable pageable) {
         List<QuestionVO> list = new ArrayList<>();
-        for(Question question : page) {
+        for (Question question : page) {
             list.add(questionToQuestionVo(question));
         }
-        int start = (int)pageable.getOffset();
-        int end = (start + pageable.getPageSize()) > list.size() ? list.size() : ( start + pageable.getPageSize());
+        int start = (int) pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > list.size() ? list.size() : (start + pageable.getPageSize());
         return new PageImpl<>(list.subList(start, end), pageable, list.size());
     }
 
 
     /**
      * 获得首个未被评分的问题
+     *
      * @return Question
      */
     public QuestionVO getFirstUnchecked() {
@@ -120,16 +124,17 @@ public class QuestionService {
 
     /**
      * 为一个问题打分
-     * @param id 问题id
-     * @param fluency 流畅性
+     *
+     * @param id         问题id
+     * @param fluency    流畅性
      * @param reasonable 合理性
-     * @param relevance 相关性
+     * @param relevance  相关性
      * @return 评分后的问题
      */
     public QuestionVO rateQuestion(Long id, int fluency, int reasonable, int relevance, int difficulty, String token) {
         Question q = questionRepository.findById(id).get();
         q.setFluency(fluency * 10);
-        q.setReasonable(reasonable * 10) ;
+        q.setReasonable(reasonable * 10);
         q.setRelevance(relevance * 10);
         q.setDifficulty(difficulty);
         q.setCheckedTimes(q.getCheckedTimes() + 1);
@@ -154,6 +159,7 @@ public class QuestionService {
 
     /**
      * 基本的 根据id获取问题
+     *
      * @param id 问题id
      * @return 问题
      */
@@ -164,14 +170,15 @@ public class QuestionService {
 
     /**
      * 生成随机的未被评分的问题
+     *
      * @return 随机的未被评分的问题
      */
     public WithTextQuesVO getRandomQuestion() {
         long randomId = RandomUtil.getRandomNum(questionRepository.findCountOfUnchecked());
         Optional<Question> questionOptional = questionRepository.findQuestionRandomly();
-        Question question=questionOptional.get();
-        Context context=question.getReference();
-        WithTextQuesVO withTextQuesVO=new WithTextQuesVO(question);
+        Question question = questionOptional.get();
+        Context context = question.getReference();
+        WithTextQuesVO withTextQuesVO = new WithTextQuesVO(question);
         withTextQuesVO.setcText(context.getText());
         withTextQuesVO.setcTitle(context.getTitle());
         return withTextQuesVO;
@@ -179,6 +186,7 @@ public class QuestionService {
 
     /**
      * 获取根据 title 划分的问题分布
+     *
      * @return 分布 list，分布由 title 和 count 构成
      */
     public List<QuestionDistributionVO> getDistributionByTitle() {
@@ -197,10 +205,10 @@ public class QuestionService {
     }
 
 
-
     /**
      * 获取根据 difficulty 划分的问题分布
      * difficulty 包括 0 - 简单, 1 - 中等, 2 - 困难
+     *
      * @return 分布 list，分布由 difficulty 和 count 构成
      */
     public List<QuestionDistributionVO> getDifficultyDistribution() {
@@ -220,6 +228,7 @@ public class QuestionService {
 
     /**
      * 获取问题的分数分布
+     *
      * @return 分数分布
      */
     public ScoreVO getScorePicData() {
@@ -307,21 +316,22 @@ public class QuestionService {
     }
 
     /*
-    * 将Question对象转换为QuestionVO对象返回给前端
-    * */
+     * 将Question对象转换为QuestionVO对象返回给前端
+     * */
     public QuestionVO questionToQuestionVo(Question question) {
-        QuestionVO questionVO=new QuestionVO(question);
+        QuestionVO questionVO = new QuestionVO(question);
         return questionVO;
     }
+
     /*
      * array转String
      * */
     public String distractorsArrayToString(String distractorsArray) {
-        String tempDistractors = distractorsArray.replace("\"","");
-        tempDistractors = tempDistractors.replace("[","");
-        tempDistractors = tempDistractors.replace("]","");
-        tempDistractors = tempDistractors.replace(",","$");
-        tempDistractors = tempDistractors.replace("\\","");
+        String tempDistractors = distractorsArray.replace("\"", "");
+        tempDistractors = tempDistractors.replace("[", "");
+        tempDistractors = tempDistractors.replace("]", "");
+        tempDistractors = tempDistractors.replace(",", "$");
+        tempDistractors = tempDistractors.replace("\\", "");
         return tempDistractors;
     }
 
@@ -330,59 +340,44 @@ public class QuestionService {
      * 这个需求实在没想到咋整，干脆直接全部查出来放到列表再切片了
      */
     public DataVo findByCondition(ConditionVO findByConditionVO) {
-        List<ContextShowVO>list =new ArrayList<>();
-        String sort=findByConditionVO.getSort();
-        Integer start=(findByConditionVO.getPageNum()-1)* findByConditionVO.getPageLimit();
-        List<Context> contexts=contextRepository.findByCondition(findByConditionVO.getcLanguage(),findByConditionVO.getcTitle(),findByConditionVO.getcSubject(),findByConditionVO.getcSource());
-        //这。。。也算是排序吧
-        if (sort.equals("-id")){
+        List<ContextShowVO> list = new ArrayList<>();
+
+        Integer start = (findByConditionVO.getPageNum() - 1) * findByConditionVO.getPageLimit();
+        Integer limit = findByConditionVO.getPageLimit();
+        List<Context> contexts = contextRepository.findByCondition(findByConditionVO.getcLanguage(), findByConditionVO.getcTitle(), findByConditionVO.getcSubject(), findByConditionVO.getcSource(), findByConditionVO.getqType(), findByConditionVO.getqQwType(), findByConditionVO.getqCognitiveType(), findByConditionVO.getqFluency(), findByConditionVO.getqRelevance(), findByConditionVO.getqDifficulty(), findByConditionVO.getqReasonability(), findByConditionVO.getqScore());
+        Integer total = contexts.size();
+        //排序
+        if ("-id".equals(findByConditionVO.getSort())) {
             Collections.reverse(contexts);
         }
-        Long total=0L;
-        for (Context context:contexts
-             ) {
-            List<Question>questions = questionRepository.findByCondition(context.getId(),findByConditionVO.getqType(),findByConditionVO.getqQwType(),findByConditionVO.getqCognitiveType(),findByConditionVO.getqFluency(),findByConditionVO.getqRelevance(),findByConditionVO.getqDifficulty(),findByConditionVO.getqReasonability(),findByConditionVO.getqScore());
-            List<QuestionVO>questionVOList=new ArrayList<>();
-            for (Question q:questions
-                 ) {
+        int end = start + limit < total ? start + limit : total;
+        List<Context> contextSub = contexts.subList(start, end);
+        for (Context context : contextSub
+        ) {
+            List<Question> questions = questionRepository.findByCondition(context.getId());
+            List<QuestionVO> questionVOList = new ArrayList<>();
+            for (Question q : questions
+            ) {
                 questionVOList.add(questionToQuestionVo(q));
             }
-            if (questions.size()!=0){
-                ContextShowVO contextShowVO =new ContextShowVO();
-                contextShowVO.setcSource(context.getOrigin());
-                contextShowVO.setcTitle(context.getTitle());
-                contextShowVO.setcLanguage(context.getLanguage());
-                contextShowVO.setId(context.getId());
-                contextShowVO.setcId(Long.toString(context.getId()));
-                contextShowVO.setcText(context.getText());
-                contextShowVO.setcSubject(context.getSubject());
+
+            ContextShowVO contextShowVO = new ContextShowVO();
+            contextShowVO.setcSource(context.getOrigin());
+            contextShowVO.setcTitle(context.getTitle());
+            contextShowVO.setcLanguage(context.getLanguage());
+            contextShowVO.setId(context.getId());
+            contextShowVO.setcId(Long.toString(context.getId()));
+            contextShowVO.setcText(context.getText());
+            contextShowVO.setcSubject(context.getSubject());
+            if (questions.size() != 0) {
                 contextShowVO.setqList(questionVOList);
-                list.add(contextShowVO);
             }
+            list.add(contextShowVO);
         }
-        total=(long)list.size();
-        Integer end=start+findByConditionVO.getPageLimit();
-        if (start<total){
-            if (end<=total){
-                ArrayList<ContextShowVO> result = new ArrayList<>(list.subList(start, end));
-                DataVo dataVo=new DataVo();
-                dataVo.setDataList(result);
-                dataVo.setTotal(total);
-                return dataVo;
-            }else {
-                ArrayList<ContextShowVO> result = new ArrayList<>(list.subList(start, total.intValue()));
-                DataVo dataVo=new DataVo();
-                dataVo.setDataList(result);
-                dataVo.setTotal(total);
-                return dataVo;
-            }
-        }else{
-            ArrayList<ContextShowVO> result = new ArrayList<>();
-            DataVo dataVo=new DataVo();
-            dataVo.setDataList(result);
-            dataVo.setTotal(total);
-            return dataVo;
-        }
+        DataVo dataVo = new DataVo();
+        dataVo.setDataList(list);
+        dataVo.setTotal(total);
+        return dataVo;
     }
 
     /**
@@ -422,6 +417,7 @@ public class QuestionService {
 
     /**
      * 删除问题，
+     *
      * @param qId 问题id
      * @return 是否删除成功
      */

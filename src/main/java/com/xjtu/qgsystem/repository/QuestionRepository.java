@@ -87,7 +87,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<String> findAllName();
 
 
-    @Query(value = "select * from question where if(IFNULL(?1,'')!='',contextId = ?1,1=1) and if(?2 !='',questionType = ?2,1=1) and if(?3 !='',whType = ?3,1=1) and if(?4 !='',cognitiveType = ?4,1=1) and if(IFNULL(?5,'')!='',fluency = ?5,1=1) and if(IFNULL(?6,'')!='',relevance = ?6,1=1) and if(IFNULL(?7,'')!='',difficulty = ?7,1=1) and if(IFNULL(?8,'')!='',reasonable = ?8,1=1) and if(IFNULL(?9,'')!='',score = ?9,1=1) ;", nativeQuery = true)
-    List<Question> findByCondition(Long id, String getqType, String getqQwType, String getqCognitiveType, Integer getqFluency, Integer getqRelevance, Integer getqDifficulty, Integer getqReasonability, Integer getqScore);
+    @Query(value = "select * from question where if(IFNULL(?1,'')!='',contextId = ?1,1=1) ;", nativeQuery = true)
+    List<Question> findByCondition(Long id);
 
 }

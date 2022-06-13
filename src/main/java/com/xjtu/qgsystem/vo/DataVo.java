@@ -4,16 +4,16 @@ import java.util.List;
 //封装一层又一层。。。
 public class DataVo {
     List<ContextShowVO> dataList;
-    Long total;
+    Integer total;
     public List<ContextShowVO> getDataList() {
         return dataList;
     }
 
-    public Long getTotal() {
+    public Integer getTotal() {
         return total;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(Integer total) {
         this.total = total;
     }
 
