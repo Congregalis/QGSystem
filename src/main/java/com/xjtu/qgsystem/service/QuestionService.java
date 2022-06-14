@@ -354,7 +354,7 @@ public class QuestionService {
         List<Context> contextSub = contexts.subList(start, end);
         for (Context context : contextSub
         ) {
-            List<Question> questions = questionRepository.findByCondition(context.getId());
+            List<Question> questions = questionRepository.findByCondition(findByConditionVO.getqType(), findByConditionVO.getqQwType(), findByConditionVO.getqCognitiveType(), findByConditionVO.getqFluency(), findByConditionVO.getqRelevance(), findByConditionVO.getqDifficulty(), findByConditionVO.getqReasonability(), findByConditionVO.getqScore(),context.getId());
             List<QuestionVO> questionVOList = new ArrayList<>();
             for (Question q : questions
             ) {
