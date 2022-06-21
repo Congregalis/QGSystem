@@ -47,8 +47,8 @@ public class NewJdbcUtil {
     }
 
     // 插入一条 context
-    public static Long insertContext(Connection connection, String text, String language, String subject) throws SQLException {
-        String sql = "insert into context(id, text, language, subject) values(?,  ?, ?, ?)";
+    public static Long insertContext(Connection connection, String text, String language, String subject,String source) throws SQLException {
+        String sql = "insert into context(id, text, language, subject,origin) values(?,  ?, ?, ?,?)";
         Long id = getAutoId("context", connection);
 
         PreparedStatement statement = connection.prepareCall(sql);
@@ -56,6 +56,7 @@ public class NewJdbcUtil {
         statement.setString(2, text);
         statement.setString(3, language);
         statement.setString(4, subject);
+        statement.setString(5, source);
         //执行sql语句（插入了几条记录，就返回几）
         int i = statement.executeUpdate();  //executeUpdate：执行并更新
 //        System.out.println(i);

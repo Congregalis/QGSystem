@@ -13,7 +13,7 @@ public class JsonAnalysis {
     public static void main(String[] args) throws SQLException {
         String json = "null";
         try {
-            json = readJsonData("History.json");
+            json = readJsonData("历史_联想题库初中.json");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class JsonAnalysis {
             String subject=jsonObject.getString("subject");
             String language=jsonObject.getString("language");
             String source=jsonObject.getString("source");
-            Long id=NewJdbcUtil.insertContext(conn,context,language,subject);
+            Long id=NewJdbcUtil.insertContext(conn,context,language,subject,source);
             JSONArray quesArray=jsonObject.getJSONArray("questions");
             for (int j = 0; j < quesArray.size(); j++) {
                 JSONObject qa = quesArray.getJSONObject(j);
