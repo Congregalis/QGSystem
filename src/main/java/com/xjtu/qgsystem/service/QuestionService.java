@@ -428,5 +428,18 @@ public class QuestionService {
 
         return true;
     }
+
+    public ContextShowVO getRandomByCondition(String cSubject, String cLanguage, String cSource) {
+        Context c=contextRepository.noDefined(cSubject,cLanguage,cSource);
+        List<Question> qs=questionRepository.findQuestionBycId(c.getId());
+        ContextShowVO conditionVO=new ContextShowVO(c);
+        List<QuestionVO> questionVOList = new ArrayList<>();
+        for (Question q:qs
+             ) {
+            questionVOList.add(new QuestionVO(q));
+        }
+        conditionVO.setqList(questionVOList);
+        return conditionVO;
+    }
 }
 

@@ -3,6 +3,7 @@ package com.xjtu.qgsystem.vo;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.xjtu.qgsystem.entity.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,15 @@ public class ContextShowVO {
      @JsonIgnore
      Long total;//数据库中总的上下文数量
      List<QuestionVO> qList=new ArrayList<>();
-
+     public ContextShowVO(){}
+     public ContextShowVO(Context c){
+          this.cId=Long.toString(c.getId());
+          this.cText=c.getText();
+          this.cLanguage=c.getLanguage();
+          this.cTitle=c.getTitle();
+          this.cSource=c.getOrigin();
+          this.cSubject=c.getSubject();
+     }
      public String getcId() {
           return cId;
      }

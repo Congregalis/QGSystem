@@ -73,6 +73,11 @@ public class QuestionController {
         return ResultUtil.success(questionService.getRandomQuestion());
     }
 
+    @RequestMapping("/randomByCondition")
+    public Result getRandomByCondition(String cSubject,String cLanguage,String cSource) {
+        return ResultUtil.success(questionService.getRandomByCondition(cSubject,cLanguage,cSource));
+    }
+
     @RequestMapping("/score")
     public Result getScorePicData() {
         return ResultUtil.success((questionService.getScorePicData()));
