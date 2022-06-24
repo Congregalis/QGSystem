@@ -410,7 +410,6 @@ public class QuestionService {
         q.setDifficulty(updateParam.getqDifficulty());
         q.setDistractors(distractorsArrayToString(updateParam.getqDistractorList()));
         contextRepository.save(c);
-
         questionRepository.save(q);
         return questionToQuestionVo(q);
     }
@@ -441,5 +440,67 @@ public class QuestionService {
         conditionVO.setqList(questionVOList);
         return conditionVO;
     }
+
+    /**
+     * 删除多个问题，
+     *
+     * @param qId 问题id
+     * @return 是否删除成功
+     */
+    public boolean deleteQuestions(Long cId) {
+        Context c = contextRepository.findById(cId).get();
+        List<Question> questions=questionRepository.findQuestionBycId(c.getId());
+        for (Question q : questions){
+            q.setIsDeleted(1);
+            questionRepository.save(q);
+        }
+        return true;
+    }
+    /**
+     * 更新 上下文
+     * 以及 问题
+     * 干扰项
+     * String cId,
+     * String cTitle,
+     * String cText,
+     * String qId,
+     * String qText,
+     * String qAnswer,
+     * String qFluency,
+     * String qReasonability,
+     * String qRelevence,
+     * String qDifficulty,
+     * String qDistractorList
+     */
+    public ArrayList<QuestionVO> updateQuestions(Map<String, Object> params) {
+        Context c = contextRepository.findById(Long.parseLong((String) params.get("cId"))).get();
+        c.setText((String) params.get("cText"));
+        c.setTitle((String) params.get("cTitle"));
+        List<Map<String,Object>> questions = (ArrayList<Map<String,Object>>) params.get("qList");
+//        List<Question> questions=questionRepository.findQuestionBycId(c.getId());
+        ArrayList<QuestionVO> result = new ArrayList<>();
+        for(Map<String,Object> map : questions) {
+            String qid = (String) map.get("qId");
+            Question q = questionRepository.findById(Long.parseLong(qid)).get();
+            q.setText((String) map.get("qText"));
+            q.setAnswerText((String) map.get("qAnswer"));
+            q.setFluency((Integer) map.get("qFluency"));
+            q.setReasonable((Integer) map.get("qReasonability"));
+            q.setRelevance((Integer) map.get("qRelevance"));
+            q.setDifficulty((Integer) map.get("qDifficulty"));
+            List<String> distractors = (ArrayList<String>)map.get("qDistractorList");
+            String temp = "";
+            for (String s:distractors){
+                temp = temp + s + "$";
+            }
+            temp = temp.substring(0,temp.length() - 1);
+            q.setDistractors(distractorsArrayToString(temp));
+            questionRepository.save(q);
+            result.add(questionToQuestionVo(q));
+        }
+        contextRepository.save(c);
+        return result;
+    }
+
 }
 
