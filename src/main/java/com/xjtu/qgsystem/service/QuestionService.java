@@ -337,7 +337,6 @@ public class QuestionService {
 
     /**
      * 根据条件筛选数据
-     * 这个需求实在没想到咋整，干脆直接全部查出来放到列表再切片了
      */
     public DataVo findByCondition(ConditionVO findByConditionVO) {
         List<ContextShowVO> list = new ArrayList<>();
@@ -427,7 +426,15 @@ public class QuestionService {
 
         return true;
     }
-
+    /**
+     * 根据筛选条件获取一个上下文及对应问题，
+     *
+     * @param cSubject 上下文学科
+     * @param cLanguage 上下文语言
+     * @param cSource 上下文来源
+     *
+     * @return 是否删除成功
+     */
     public ContextShowVO getRandomByCondition(String cSubject, String cLanguage, String cSource) {
         Context c=contextRepository.noDefined(cSubject,cLanguage,cSource);
         if(c==null)return null;
@@ -445,7 +452,7 @@ public class QuestionService {
     /**
      * 删除多个问题，
      *
-     * @param qId 问题id
+     * @param cId 问题id
      * @return 是否删除成功
      */
     public boolean deleteQuestions(Long cId) {
