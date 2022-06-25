@@ -431,6 +431,7 @@ public class QuestionService {
 
     public ContextShowVO getRandomByCondition(String cSubject, String cLanguage, String cSource) {
         Context c=contextRepository.noDefined(cSubject,cLanguage,cSource);
+        if(c==null)return null;
         List<Question> qs=questionRepository.findQuestionBycId(c.getId());
         ContextShowVO conditionVO=new ContextShowVO(c);
         List<QuestionVO> questionVOList = new ArrayList<>();

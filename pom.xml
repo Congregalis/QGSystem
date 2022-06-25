@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.xjtu</groupId>
     <artifactId>QGSystem</artifactId>
-    <version>v0.1.13</version>
+    <version>v0.1.14</version>
     <name>QGSystem</name>
     <description>Demo project for Spring Boot</description>
     <properties>
