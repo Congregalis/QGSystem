@@ -327,7 +327,6 @@ public class QuestionService {
      */
     public DataVo findByCondition(ConditionVO findByConditionVO) {
         List<ContextShowVO> list = new ArrayList<>();
-
         Integer start = (findByConditionVO.getPageNum() - 1) * findByConditionVO.getPageLimit();
         Integer limit = findByConditionVO.getPageLimit();
         List<Context> contexts = contextRepository.findByCondition(findByConditionVO.getcLanguage(), findByConditionVO.getcTitle(), findByConditionVO.getcSubject(), findByConditionVO.getcSource(), findByConditionVO.getqType(), findByConditionVO.getqQwType(), findByConditionVO.getqCognitiveType(), findByConditionVO.getqFluency(), findByConditionVO.getqRelevance(), findByConditionVO.getqDifficulty(), findByConditionVO.getqReasonability(), findByConditionVO.getqScore());
