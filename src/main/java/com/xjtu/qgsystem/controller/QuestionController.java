@@ -11,6 +11,8 @@ import com.xjtu.qgsystem.vo.GetFrontUpdateParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/question")
 public class QuestionController {
@@ -114,7 +116,22 @@ public class QuestionController {
 
     @RequestMapping(value = "/delete/{qid}", method = RequestMethod.DELETE)
     public Result deletedQuestion(@PathVariable("qid") String qId) {
+        System.out.println("输出qid的值" + qId);
         boolean res = questionService.deleteQuestion(Long.parseLong(qId));
+        return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
+    }
+
+    @RequestMapping(value = "/updateQuestions", method = RequestMethod.POST)
+    public Result updateQuestions(@RequestBody Map<String, Object> params) {
+        System.out.println("输出参数" + params);
+        System.out.println();
+        return ResultUtil.success(questionService.updateQuestions(params));
+    }
+
+    @RequestMapping(value = "/deleteQuestions/{cid}", method = RequestMethod.DELETE)
+    public Result deletedQuestions(@PathVariable("cid") String cid) {
+        System.out.println("输出cid的值" + cid);
+        boolean res = questionService.deleteQuestions(Long.parseLong(cid));
         return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
     }
 }
