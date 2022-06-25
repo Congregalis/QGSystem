@@ -123,8 +123,6 @@ public class QuestionController {
 
     @RequestMapping(value = "/updateQuestions", method = RequestMethod.POST)
     public Result updateQuestions(@RequestBody Map<String, Object> params) {
-        System.out.println("输出参数" + params);
-        System.out.println();
         return ResultUtil.success(questionService.updateQuestions(params));
     }
 

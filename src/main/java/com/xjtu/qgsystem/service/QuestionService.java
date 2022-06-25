@@ -485,6 +485,7 @@ public class QuestionService {
             q.setReasonable((Integer) map.get("qReasonability"));
             q.setRelevance((Integer) map.get("qRelevance"));
             q.setDifficulty((Integer) map.get("qDifficulty"));
+            q.setIsChecked(1);
             List<String> distractors = (ArrayList<String>)map.get("qDistractorList");
             String temp = "";
             for (String s:distractors){
