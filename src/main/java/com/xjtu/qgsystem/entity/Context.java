@@ -22,6 +22,15 @@ public class Context {
     private String language;
     private String subject;
     public String origin;
+    private int contextIsDeleted;//0未删除 1已经被删除
+
+    public int getContextIsDeleted() {
+        return contextIsDeleted;
+    }
+
+    public void setContextIsDeleted(int contextIsDeleted) {
+        this.contextIsDeleted = contextIsDeleted;
+    }
 
     public String getOrigin() {
         return origin;

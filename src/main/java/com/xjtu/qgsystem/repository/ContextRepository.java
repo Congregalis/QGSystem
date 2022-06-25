@@ -21,6 +21,10 @@ public interface ContextRepository extends JpaRepository<Context, Long> {
     List<Context> findByCondition(String language, String title, String subject, String source,  String qType, String qQwType, String qCognitiveType, Integer qFluency, Integer qRelevance, Integer qDifficulty, Integer qReasonability, Integer qScore);
 
     //从数据库中拿取一个问题没有被标注的上下文
-    @Query(value = "select  distinct context.* from context inner join question  on context.id=question.contextId where if(?2 !='',language = ?2,1=1)   and if(?1 !='',subject = ?1,1=1) and if(?3 !='',origin = ?3,1=1) and isChecked=0 limit 0,1 ;", nativeQuery = true)
+    @Query(value = "select  distinct context.* from context inner join question  on context.id=question.contextId where if(?2 !='',language = ?2,1=1)   and if(?1 !='',subject = ?1,1=1) and if(?3 !='',origin = ?3,1=1) and isChecked=0 limit 0,1 and contextIsDeleted=0 limit 0,1;", nativeQuery = true)
     Context noDefined(String cSubject, String cLanguage, String cSource);
+
+    //从数据库中拿取一个问题没有被标注的上下文
+    @Query(value = "select  distinct context.* from context inner join question on context.id=question.contextId where isChecked=0 and contextIsDeleted=0 limit 0,1;", nativeQuery = true)
+    Context notCheckedAndDeleted();
 }

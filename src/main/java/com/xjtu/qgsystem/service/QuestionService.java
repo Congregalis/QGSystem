@@ -144,19 +144,6 @@ public class QuestionService {
         return questionToQuestionVo(q);
     }
 
-//    /**
-//     * 删除问题，实际是给 isDeleted 字段赋 1，实现懒删除
-//     * @param id 问题id
-//     * @return 是否删除成功
-//     */
-//    public boolean deleteQuestion(Long id) {
-//        Question q = questionRepository.findById(id).get();
-//        q.setIsDeleted(1);
-//        questionRepository.save(q);
-//
-//        return true;
-//    }
-
     /**
      * 基本的 根据id获取问题
      *
@@ -423,7 +410,6 @@ public class QuestionService {
         Question q = questionRepository.findById(qId).get();
         q.setIsDeleted(1);
         questionRepository.save(q);
-
         return true;
     }
     /**
@@ -436,13 +422,17 @@ public class QuestionService {
      * @return 是否删除成功
      */
     public ContextShowVO getRandomByCondition(String cSubject, String cLanguage, String cSource) {
-        Context c=contextRepository.noDefined(cSubject,cLanguage,cSource);
+        Context c = null;
+        if(cLanguage.equals("1")&&cSource.equals("1")&&cSubject.equals("1")){
+            c = contextRepository.notCheckedAndDeleted();
+        } else {
+            c = contextRepository.noDefined(cSubject,cLanguage,cSource);
+        }
         if(c==null)return null;
         List<Question> qs=questionRepository.findQuestionBycId(c.getId());
         ContextShowVO conditionVO=new ContextShowVO(c);
         List<QuestionVO> questionVOList = new ArrayList<>();
-        for (Question q:qs
-             ) {
+        for (Question q : qs) {
             questionVOList.add(new QuestionVO(q));
         }
         conditionVO.setqList(questionVOList);
@@ -457,11 +447,13 @@ public class QuestionService {
      */
     public boolean deleteQuestions(Long cId) {
         Context c = contextRepository.findById(cId).get();
-        List<Question> questions=questionRepository.findQuestionBycId(c.getId());
+        c.setContextIsDeleted(1);
+        List<Question> questions = questionRepository.findQuestionBycId(c.getId());
         for (Question q : questions){
             q.setIsDeleted(1);
             questionRepository.save(q);
         }
+        contextRepository.save(c);
         return true;
     }
     /**
@@ -480,13 +472,11 @@ public class QuestionService {
      * String qDifficulty,
      * String qDistractorList
      */
-    public ArrayList<QuestionVO> updateQuestions(Map<String, Object> params) {
+    public ContextShowVO updateQuestions(Map<String, Object> params) {
         Context c = contextRepository.findById(Long.parseLong((String) params.get("cId"))).get();
         c.setText((String) params.get("cText"));
         c.setTitle((String) params.get("cTitle"));
         List<Map<String,Object>> questions = (ArrayList<Map<String,Object>>) params.get("qList");
-//        List<Question> questions=questionRepository.findQuestionBycId(c.getId());
-        ArrayList<QuestionVO> result = new ArrayList<>();
         for(Map<String,Object> map : questions) {
             String qid = (String) map.get("qId");
             Question q = questionRepository.findById(Long.parseLong(qid)).get();
@@ -504,10 +494,9 @@ public class QuestionService {
             temp = temp.substring(0,temp.length() - 1);
             q.setDistractors(distractorsArrayToString(temp));
             questionRepository.save(q);
-            result.add(questionToQuestionVo(q));
         }
         contextRepository.save(c);
-        return result;
+        return getRandomByCondition("1","1","1");
     }
 
 }
