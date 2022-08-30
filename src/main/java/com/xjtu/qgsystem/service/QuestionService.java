@@ -475,10 +475,24 @@ public class QuestionService {
         Context c = contextRepository.findById(Long.parseLong((String) params.get("cId"))).get();
         c.setText((String) params.get("cText"));
         c.setTitle((String) params.get("cTitle"));
+        List<Question> allQuestions = questionRepository.findQuestionBycId(c.getId());
+        Map<Question,Integer> questionMap = new HashMap<>();
+        for (Question q : allQuestions){
+            questionMap.put(q,0);
+        }
         List<Map<String,Object>> questions = (ArrayList<Map<String,Object>>) params.get("qList");
         for(Map<String,Object> map : questions) {
             String qid = (String) map.get("qId");
+            for (Question q : allQuestions){
+                if (Long.parseLong(qid) == q.getId()) {
+                    questionMap.put(q,1);
+                }
+            }
             Question q = questionRepository.findById(Long.parseLong(qid)).get();
+            if (q == null) {
+                q = new Question();
+                q.setId(Long.parseLong(qid));
+            }
             q.setText((String) map.get("qText"));
             q.setAnswerText((String) map.get("qAnswer"));
             q.setFluency((Integer) map.get("qFluency"));
@@ -494,6 +508,11 @@ public class QuestionService {
             temp = temp.substring(0,temp.length() - 1);
             q.setDistractors(distractorsArrayToString(temp));
             questionRepository.save(q);
+        }
+        for (Question question : allQuestions){
+            if (questionMap.get(question) == 0) {
+                deleteQuestion(question.getId());
+            }
         }
         contextRepository.save(c);
         return getRandomByCondition("1","1","1");
