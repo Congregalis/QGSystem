@@ -9,13 +9,13 @@ import javax.persistence.*;
 public class MultiContext {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cid", nullable = false)
-
+    @Column(name = "cId", nullable = false)
     private Long cId;
 
     private String cText;
 
     private boolean cIsChecked=false;
+
 
     public Long getCid() {
         return cId;

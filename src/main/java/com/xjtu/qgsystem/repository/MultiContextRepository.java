@@ -16,6 +16,6 @@ public interface MultiContextRepository extends JpaRepository<MultiContext, Long
     List<MultiContext> findAllContext(Integer pageNum, Integer pageLimit);
     @Transactional
     @Modifying
-    @Query(value = "update  multicontext set cText=?2 where cId=?1 ", nativeQuery = true)
+    @Query(value = "update  multicontext set cText=?2 , cIschecked=TRUE where cId=?1 ", nativeQuery = true)
     void updateContext(long parseLong, String cText);
 }

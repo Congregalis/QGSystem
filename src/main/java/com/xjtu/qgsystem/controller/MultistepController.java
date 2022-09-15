@@ -66,4 +66,24 @@ public class MultistepController {
         boolean res = multistepService.updateContext(Long.parseLong(map.get("cId")), map.get("cText"));
         return res ? ResultUtil.success("更新成功") : ResultUtil.fail("更新失败");
     }
+    @RequestMapping(value = "/selectAlgo")
+    public Result generateQuestion(@RequestParam("algorithm") Integer algorithm){
+        boolean res = multistepService.generateQuestion(algorithm);
+        return res ? ResultUtil.success("生成成功") : ResultUtil.fail("生成失败");
+    }
+    @RequestMapping(value = "/getQuestions")
+    public Result getQuestions(@RequestParam("pageNum") Integer pageNum,@RequestParam("pageLimit") Integer pageLimit){
+        return ResultUtil.success(multistepService.queryQuestions((pageNum-1)*pageLimit+1,pageLimit));
+    }
+    @RequestMapping(value = "/deleteQuestion")
+    public Result deleteQuestion(@RequestParam("qId") String qId){
+        boolean res = multistepService.deleteQuestion(Long.parseLong(qId));
+        return res ? ResultUtil.success("删除成功") : ResultUtil.fail("删除失败");
+    }
+    @PostMapping(value = "/updateQuestion")
+    public Result updateQuestion(@RequestBody Map<String,Object> map){
+        boolean res = multistepService.updateQuestion(Long.parseLong((String) map.get("qId")),(String) map.get("qText"),(String) map.get("qAnswer"),(boolean) map.get("qIsChecked"),(Integer) map.get("qFluency"),(Integer) map.get("qRelevance"),(Integer) map.get("qReasonability"),(Integer) map.get("qDifficulty"));
+
+        return res ? ResultUtil.success("更新成功") : ResultUtil.fail("更新失败");
+    }
 }
